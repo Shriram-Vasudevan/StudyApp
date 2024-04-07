@@ -8,64 +8,84 @@
 import SwiftUI
 
 struct Home: View {
+    @ObservedObject var homeViewModel = HomeViewModel()
+    @State var navigateToHostRoom: Bool = false
+    
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    Text("Hello Shriram")
-                        .foregroundColor(.white)
-                        .font(.largeTitle)
-                        .bold()
+        NavigationStack {
+            ZStack {
+                VStack {
+                    HStack {
+                        Text("Hello Shriram")
+                            .foregroundColor(.white)
+                            .font(.largeTitle)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Image(systemName: "person.fill")
+                            .foregroundColor(.black)
+                            .padding(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(.white)
+                            )
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                    
                     
                     Spacer()
                     
-                    Image(systemName: "person.fill")
-                        .foregroundColor(.black)
-                        .padding(10)
+                    Button(action: {
+                        Task {
+                            do {
+                                try await homeViewModel.createRoom()
+                                
+                                navigateToHostRoom = true
+                            } catch {
+                                print(error.localizedDescription)
+                            }
+                        }
+                    }, label: {
+                        VStack {
+                            Text("Create Room")
+                                .foregroundColor(.black)
+                                .bold()
+                        }
+                        .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(.white)
                         )
+                    })
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("Join Room")
+                            .foregroundColor(.black)
+                            .bold()
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                    )
+                    
+                    Spacer()
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
-                
-                
-                Spacer()
-                
-                VStack {
-                    Text("Create Room")
-                        .foregroundColor(.black)
-                        .bold()
-                }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.white)
-                )
-                
-                Spacer()
-                
-                VStack {
-                    Text("Join Room")
-                        .foregroundColor(.black)
-                        .bold()
-                }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.white)
-                )
-                
-                Spacer()
             }
+            .navigationDestination(isPresented: $navigateToHostRoom, destination: {
+                HostsRoom()
+            })
+            .background(
+                Image("CardTable")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea()
+            )
         }
-        .background(
-            Image("CardTable")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-        )
     }
 }
 
