@@ -26,8 +26,10 @@ struct StudyAppApp: App {
         WindowGroup {
             if Auth.auth().currentUser != nil {
                 Home()
+                    .preferredColorScheme(.light)
             } else {
                 LoginView()
+                    .preferredColorScheme(.light)
             }
         }
     }

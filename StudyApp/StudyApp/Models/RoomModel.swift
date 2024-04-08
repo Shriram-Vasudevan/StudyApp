@@ -11,7 +11,8 @@ import FirebaseFirestore
 struct RoomModel: Identifiable, Codable {
     @DocumentID var id: String?
     var host: String
-    var roomMembers: String
+    var roomName: String
+    var roomMembers: [String]
     var timer: Double?
     var backgroundImage: String?
     

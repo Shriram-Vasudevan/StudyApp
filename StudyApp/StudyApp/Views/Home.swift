@@ -10,6 +10,12 @@ import SwiftUI
 struct Home: View {
     @ObservedObject var homeViewModel = HomeViewModel()
     @State var navigateToHostRoom: Bool = false
+    @State var navigateToParticipantRoom: Bool = false
+    @State var showEnterRoomIDView: Bool = false
+    
+    @State var roomInformation: (String, String) = ("", "")
+    
+    @State var roomModel: RoomModel?
     
     var body: some View {
         NavigationStack {
@@ -40,7 +46,8 @@ struct Home: View {
                     Button(action: {
                         Task {
                             do {
-                                try await homeViewModel.createRoom()
+                                let roomInformation = try await homeViewModel.createRoom()
+                                self.roomInformation = roomInformation
                                 
                                 navigateToHostRoom = true
                             } catch {
@@ -62,22 +69,39 @@ struct Home: View {
                     
                     Spacer()
                     
-                    VStack {
-                        Text("Join Room")
-                            .foregroundColor(.black)
-                            .bold()
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(.white)
-                    )
+                    Button(action: {
+                        showEnterRoomIDView = true
+                    }, label: {
+                        VStack {
+                            Text("Join Room")
+                                .foregroundColor(.black)
+                                .bold()
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(.white)
+                        )
+                    })
                     
                     Spacer()
                 }
+                
+                if showEnterRoomIDView {
+                    EnterRoomIDWidget(homeViewModel: homeViewModel, isOpen: $showEnterRoomIDView) { roomModel in
+                        self.roomModel = roomModel
+                        navigateToParticipantRoom = true
+                    }
+                    .transition(.opacity)
+                }
             }
+            .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
+                if let roomModel = self.roomModel {
+                    ParticipantsView(participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
+                }
+            })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom()
+                HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [roomInformation.0])))
             })
             .background(
                 Image("CardTable")
