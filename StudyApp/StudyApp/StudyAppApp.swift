@@ -24,7 +24,7 @@ struct StudyAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if Auth.auth().currentUser != nil {
+            if authenticationManager.isUserSignedIn() {
                 Home()
                     .preferredColorScheme(.light)
             } else {

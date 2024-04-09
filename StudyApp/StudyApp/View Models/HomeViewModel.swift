@@ -13,12 +13,18 @@ import FirebaseAuth
 class HomeViewModel: ObservableObject {
     func joinRoom(roomID: String) async throws -> RoomModel {
         do {
+            guard let user = Auth.auth().currentUser, let displayName = user.displayName else {
+                throw AuthError.noUser
+            }
+            
             let dbReference = Firestore.firestore()
             
             let snapshot = try await dbReference.collection("Rooms").document(roomID).getDocument()
             print(snapshot.data())
-            let roomModel = try snapshot.data(as: RoomModel.self)
+            var roomModel = try snapshot.data(as: RoomModel.self)
             
+            await addUserToRoom(roomModel: roomModel)
+            roomModel.roomMembers.append("\(user.uid)-\(displayName)")
             return roomModel
         } catch {
             print(error.localizedDescription)
@@ -44,12 +50,12 @@ class HomeViewModel: ObservableObject {
     
     func addUserToRoom(roomModel: RoomModel) async {
         do {
-            guard let user = Auth.auth().currentUser, let roomID = roomModel.id else { return }
+            guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
             let dbRef = Firestore.firestore()
             
             try await dbRef.collection("Rooms").document(roomID).updateData(
                 [
-                    "roomMembers" : FieldValue.arrayUnion([user.uid])
+                    "roomMembers" : FieldValue.arrayUnion(["\(user.uid)-\(userDisplayName)"])
                 ]
             )
         } catch {
@@ -57,9 +63,9 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func createRoom() async throws -> (roomID: String, userID: String) {
+    func createRoom() async throws -> (roomID: String, hostID: String, hostDisplayName: String) {
         do {
-            guard let user = Auth.auth().currentUser else { throw AuthError.noUser }
+            guard let user = Auth.auth().currentUser, let userDisplayName = user.displayName else { throw AuthError.noUser }
             let dbReference = Firestore.firestore()
             
             let roomID = generateRoomID()
@@ -67,12 +73,12 @@ class HomeViewModel: ObservableObject {
             try await dbReference.collection("Rooms").document(roomID).setData(
                 [
                     "host" : user.uid,
-                    "roomMembers": [user.uid],
+                    "roomMembers": ["\(user.uid)-\(userDisplayName)"],
                     "roomName": "Room Name"
                 ]
             )
             
-            return (roomID, user.uid)
+            return (roomID, user.uid, userDisplayName)
         }
         catch {
             throw AuthError.creationFailed

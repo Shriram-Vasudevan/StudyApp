@@ -13,6 +13,13 @@ import FirebaseAuth
 
 class AuthenticationManager : ObservableObject {
     
+    func isUserSignedIn() -> Bool {
+        guard let currentUser = Auth.auth().currentUser else { return false }
+        
+        print("user exists: \(currentUser.uid)")
+        
+        return true
+    }
     func signInAnonymously(completionHandler: @escaping () -> Void) {
         Auth.auth().signInAnonymously { (authResult, error) in
             guard let user = authResult?.user else {
@@ -26,11 +33,26 @@ class AuthenticationManager : ObservableObject {
         }
     }
     
-    func signUp(email: String, password: String, completionHandler: @escaping () -> Void) {
+    func signUp(email: String, password: String, name: String, completionHandler: @escaping () -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 print("Sign up failed: \(error.localizedDescription)")
                 return
+            }
+            
+            guard let user = authResult?.user else {
+                print("User was not created.")
+                return
+            }
+            
+            let changeRequest = user.createProfileChangeRequest()
+            changeRequest.displayName = name
+            changeRequest.commitChanges { error in
+                if let error = error {
+                    print("Error updating display name: \(error.localizedDescription)")
+                } else {
+                    print("User display name updated to: \(name)")
+                }
             }
             
             completionHandler()

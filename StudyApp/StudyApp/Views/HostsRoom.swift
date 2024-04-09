@@ -11,6 +11,9 @@ struct HostsRoom: View {
     @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
     @State var showEnterRoomNameWidget: Bool = false
     
+    let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
+    let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
+    
     var body: some View {
         ZStack {
             VStack {
@@ -40,6 +43,17 @@ struct HostsRoom: View {
                 }
                 .padding(.horizontal)
                 
+                HStack {
+                    if let id = hostsRoomViewModel.roomModel.id {
+                        Text(id.isEmpty ? "Error Loading ID" : id)
+                            .font(.headline)
+                            .bold()
+                            .foregroundColor(.white)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
                 Spacer()
             }
             
@@ -55,17 +69,15 @@ struct HostsRoom: View {
         }
         .onAppear {
             showEnterRoomNameWidget = true
+            hostsRoomViewModel.listenForRoomUpdates()
         }
         .background(
-            Image("CardTable")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
+            customBlue
         )
         .navigationBarBackButtonHidden()
     }
 }
 
 #Preview {
-    HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8"])))
+    HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
 }

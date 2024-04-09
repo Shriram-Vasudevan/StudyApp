@@ -43,6 +43,7 @@ struct EnterRoomNameWidget: View {
                 
                 TextField("Enter Name", text: $roomName)
                     .padding()
+                    .autocapitalization(.none)
                     .background(
                         RoundedRectangle(cornerRadius: 15)
                             .fill(customGrey.opacity(0.7))

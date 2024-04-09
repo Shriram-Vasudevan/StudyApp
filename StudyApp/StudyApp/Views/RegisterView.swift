@@ -11,10 +11,12 @@ import SwiftUI
 
 struct RegisterView: View {
     @State private var email: String = ""
+    @State private var name: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     
     @State var emailUnfilled: Bool = false
+    @State var nameUnfilled: Bool = false
     @State var passwordUnfilled: Bool = false
     @State var confirmPasswordUnfilled: Bool = false
     @State var passwordsDontMatch: Bool = false
@@ -57,6 +59,13 @@ struct RegisterView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
 
+                CustomTextField(placeholder: Text("First Name").foregroundColor(.gray), text: $name)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 10).fill(nameUnfilled ? .red.opacity(0.7) : customGrey))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(nameUnfilled ? .red : .gray.opacity(0.3), lineWidth: 1))
+                    .padding(.horizontal, 20)
+                    .autocapitalization(.none)
+                    .padding(.bottom, 15)
          
                 CustomTextField(placeholder: Text("Email").foregroundColor(.gray), text: $email)
                     .padding()
@@ -95,8 +104,6 @@ struct RegisterView: View {
                         Spacer()
                     }
                 }
-                
-
               
                 Button(action: {
                     withAnimation {
@@ -158,6 +165,7 @@ struct RegisterView: View {
     
     func checkFieldsAndSignUp() {
         emailUnfilled = email.isEmpty
+        nameUnfilled = name.isEmpty
         passwordUnfilled = password.isEmpty
         confirmPasswordUnfilled = confirmPassword.isEmpty
         
@@ -165,8 +173,8 @@ struct RegisterView: View {
         
         passwordsDontMatch = confirmPasswordUnfilled || passwordUnfilled ? false :  password != confirmPassword
         
-        if (!emailUnfilled && !passwordUnfilled && !confirmPasswordUnfilled && !passwordsDontMatch) {
-            authenticationManager.signUp(email: email, password: password, completionHandler: {
+        if (!emailUnfilled && !nameUnfilled && !passwordUnfilled && !confirmPasswordUnfilled && !passwordsDontMatch) {
+            authenticationManager.signUp(email: email, password: password, name: name, completionHandler: {
                     dismiss()
             })
         }

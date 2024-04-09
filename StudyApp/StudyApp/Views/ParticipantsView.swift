@@ -10,6 +10,9 @@ import SwiftUI
 struct ParticipantsView: View {
     @ObservedObject var participantsViewModel: ParticipantsViewModel
     
+    let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
+    let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
+    
     var body: some View {
         ZStack {
             VStack {
@@ -27,19 +30,33 @@ struct ParticipantsView: View {
                 }
                 .padding(.horizontal)
                 
+                HStack {
+                    ForEach(participantsViewModel.roomModel.roomMembers, id: \.self) { member in
+                        Text(member.split(separator: "-")[1])
+                            .font(.headline)
+                            .foregroundColor(.black)
+                            .bold()
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.white)
+                            )
+                    }
+                }
+                
                 Spacer()
             }
         }
+        .onAppear {
+            participantsViewModel.listenForRoomUpdates()
+        }
         .background(
-            Image("CardTable")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
+            customBlue
         )
         .navigationBarBackButtonHidden()
     }
 }
 
 #Preview {
-    ParticipantsView(participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Name", roomMembers: ["fewfwdfrwe", "fihewoifhwefhew"])))
+    ParticipantsView(participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: ["fewfwdfrwe=Shriram"])))
 }

@@ -13,9 +13,12 @@ struct Home: View {
     @State var navigateToParticipantRoom: Bool = false
     @State var showEnterRoomIDView: Bool = false
     
-    @State var roomInformation: (String, String) = ("", "")
+    @State var roomInformation: (String, String, String) = ("", "", "")
     
     @State var roomModel: RoomModel?
+    
+    let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
+    let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
     
     var body: some View {
         NavigationStack {
@@ -101,13 +104,10 @@ struct Home: View {
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [roomInformation.0])))
+                HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
             })
             .background(
-                Image("CardTable")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
+                customBlue
             )
         }
     }
