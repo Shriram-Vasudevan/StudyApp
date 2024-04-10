@@ -1,49 +1,22 @@
 //
-//  ParticipantsViewModel.swift
+//  MessageManager.swift
 //  StudyApp
 //
-//  Created by Shriram Vasudevan on 4/7/24.
+//  Created by Shriram Vasudevan on 4/9/24.
 //
 
 import Foundation
-import Firebase
-import FirebaseAuth
 import FirebaseFirestore
+import Firebase
+import FirebaseCore
+import FirebaseFirestoreSwift
+import FirebaseAuth
 import FirebaseStorage
 
-class ParticipantsViewModel: ObservableObject {
-    @Published var roomModel: RoomModel
+class MessageManager: ObservableObject {
     @Published private(set) var messages: [Message] = []
-    
     let db = Firestore.firestore()
     let storage = Storage.storage()
-    
-    init(roomModel: RoomModel) {
-        self.roomModel = roomModel
-    }
-
-    func listenForRoomUpdates() {
-        guard let roomID = roomModel.id else { return }
-        let dbReference = Firestore.firestore()
-        
-        dbReference.collection("Rooms").document(roomID)
-            .addSnapshotListener { documentSnapshot, error in
-                guard let document = documentSnapshot else {
-                    print("Error fetching document: \(error!)")
-                    return
-                }
-                
-                let source = document.metadata.hasPendingWrites ? "Local" : "Server"
-                print("\(source) data: \(document.data() ?? [:])")
-                
-                do {
-                    let roomModel = try document.data(as: RoomModel.self)
-                    self.roomModel = roomModel
-                } catch {
-                    return
-                }
-          }
-    }
     
     func getMessage(roomID: String) {
         db.collection("Rooms").document(roomID).collection("chat").addSnapshotListener { querySnapshot, error in

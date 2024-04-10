@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct Home: View {
+    @StateObject var messageManager = MessageManager()
     @ObservedObject var homeViewModel = HomeViewModel()
+    var authenticationManager = AuthenticationManager()
+    
+    @Binding var pageType: PageType
     @State var navigateToHostRoom: Bool = false
     @State var navigateToParticipantRoom: Bool = false
     @State var showEnterRoomIDView: Bool = false
     
     @State var roomInformation: (String, String, String) = ("", "", "")
-    
     @State var roomModel: RoomModel?
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
@@ -32,13 +35,19 @@ struct Home: View {
                         
                         Spacer()
                         
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.black)
-                            .padding(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.white)
-                            )
+                        Button(action: {
+                            authenticationManager.signOut {
+                                pageType = .authentication
+                            }
+                        }, label: {
+                            Image(systemName: "person.fill")
+                                .foregroundColor(.black)
+                                .padding(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(.white)
+                                )
+                        })
                     }
                     .padding(.horizontal)
                     .padding(.bottom)
@@ -100,11 +109,11 @@ struct Home: View {
             }
             .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
                 if let roomModel = self.roomModel {
-                    ParticipantsView(participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
+                    ParticipantsView(messageManager: messageManager, participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
+                HostsRoom(messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
             })
             .background(
                 customBlue
@@ -114,5 +123,5 @@ struct Home: View {
 }
 
 #Preview {
-    Home()
+    Home(pageType: .constant(.main))
 }

@@ -25,10 +25,10 @@ struct StudyAppApp: App {
     var body: some Scene {
         WindowGroup {
             if authenticationManager.isUserSignedIn() {
-                Home()
+                PagesHolderView(pageType: .main)
                     .preferredColorScheme(.light)
             } else {
-                LoginView()
+                PagesHolderView(pageType: .authentication)
                     .preferredColorScheme(.light)
             }
         }

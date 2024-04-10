@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct HostsRoom: View {
+    @ObservedObject var messageManager: MessageManager
     @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
-    @State var showEnterRoomNameWidget: Bool = false
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
+    
+    @State var showEnterRoomNameWidget: Bool = false
+    @State var showChatView: Bool = false
     
     var body: some View {
         ZStack {
@@ -55,6 +58,23 @@ struct HostsRoom: View {
                 .padding(.horizontal)
                 
                 Spacer()
+                
+                HStack {
+                    Spacer()
+                    
+                    Button(action: {
+                        showChatView = true
+                    }, label: {
+                        Image(systemName: "message.fill")
+                            .foregroundColor(.black)
+                            .padding(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(.white)
+                            )
+                    })
+                }
+                .padding(.horizontal)
             }
             
             if showEnterRoomNameWidget {
@@ -62,6 +82,11 @@ struct HostsRoom: View {
                     .transition(.opacity)
             }
         }
+        .sheet(isPresented: $showChatView, content: {
+            if let roomID = hostsRoomViewModel.roomModel.id {
+                ChatView(messageManager: messageManager, roomID: roomID)
+            }
+        })
         .onChange(of: hostsRoomViewModel.roomModel.roomName) { roomName in
             Task {
                 await hostsRoomViewModel.updateRoomName(roomName: roomName)
@@ -70,6 +95,10 @@ struct HostsRoom: View {
         .onAppear {
             showEnterRoomNameWidget = true
             hostsRoomViewModel.listenForRoomUpdates()
+            
+            guard let roomID = hostsRoomViewModel.roomModel.id else { return }
+            
+            messageManager.getMessage(roomID: roomID)
         }
         .background(
             customBlue
@@ -79,5 +108,5 @@ struct HostsRoom: View {
 }
 
 #Preview {
-    HostsRoom(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
+    HostsRoom(messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
 }

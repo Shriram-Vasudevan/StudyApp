@@ -152,13 +152,6 @@ struct RegisterView: View {
                 }
 
             }
-            .background(
-                Image("NJLandscape")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
-                    .scaleEffect(x: -1, y: 1)
-            )
         }
         .navigationBarBackButtonHidden()
     }

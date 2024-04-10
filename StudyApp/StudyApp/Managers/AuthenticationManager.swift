@@ -71,4 +71,17 @@ class AuthenticationManager : ObservableObject {
             completionHandler()
         }
     }
+    
+    func signOut(completionHandler: @escaping () -> Void) {
+        do {
+            guard let currentUser = Auth.auth().currentUser else { return }
+            
+            try Auth.auth().signOut()
+            
+            completionHandler()
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }

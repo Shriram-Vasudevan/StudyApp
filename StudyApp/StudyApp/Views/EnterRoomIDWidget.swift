@@ -48,6 +48,7 @@ struct EnterRoomIDWidget: View {
                 
                 TextField("Enter Code", text: $roomID)
                     .padding()
+                    .autocapitalization(.none)
                     .background(
                         RoundedRectangle(cornerRadius: 15)
                             .fill(customGrey.opacity(0.7))

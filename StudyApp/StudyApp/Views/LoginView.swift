@@ -12,6 +12,8 @@ struct LoginView: View {
     @ObservedObject var authenticationManager = AuthenticationManager()
     @ObservedObject private var keyboardResponder = KeyboardResponder()
     
+    @Binding var pageType: PageType
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var emailError: Bool = false
@@ -131,13 +133,6 @@ struct LoginView: View {
             .navigationDestination(isPresented: $navigateToRegister) {
                 RegisterView(authenticationManager: authenticationManager)
             }
-            .background(
-                Image("NJLandscape")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .ignoresSafeArea()
-                    .scaleEffect(x: -1, y: 1)
-            )
         }
     }
     
@@ -147,7 +142,7 @@ struct LoginView: View {
         
         if (!emailError && !passwordError) {
             authenticationManager.signIn(email: email, password: password, completionHandler: {
-                    
+                pageType = .main
             })
         }
     }
@@ -181,7 +176,7 @@ struct CustomSecureField: View {
 
 
 #Preview {
-    LoginView()
+    LoginView(pageType: .constant(.authentication))
 }
 
 
