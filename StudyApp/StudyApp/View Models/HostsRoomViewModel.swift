@@ -22,6 +22,10 @@ class HostsRoomViewModel: ObservableObject {
         self.roomModel = roomModel
     }
     
+    func closeRoom() {
+        
+    }
+    
     func updateRoomName(roomName: String) async {
         do {
             DispatchQueue.main.async {
@@ -96,4 +100,5 @@ class HostsRoomViewModel: ObservableObject {
             print("failed to send message")
         }
     }
+    
 }

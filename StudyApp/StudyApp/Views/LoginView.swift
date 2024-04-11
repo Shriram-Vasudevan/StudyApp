@@ -82,6 +82,7 @@ struct LoginView: View {
                         
                     }
                     .padding(.horizontal)
+                    
                     Button(action: {
                         withAnimation {
                             checkFieldsAndLogin()

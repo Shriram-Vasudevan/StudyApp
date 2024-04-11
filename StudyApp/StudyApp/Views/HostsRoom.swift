@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HostsRoom: View {
+    @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
     @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
     
@@ -17,19 +18,13 @@ struct HostsRoom: View {
     @State var showEnterRoomNameWidget: Bool = false
     @State var showChatView: Bool = false
     
+    @State var showTaskCreationSheet: Bool = false
+    @State var task: String = ""
+    
     var body: some View {
         ZStack {
             VStack {
                 HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.forward")
-                        .foregroundColor(.white)
-                        .scaleEffect(x: -1, y: 1)
-//                        .padding(6)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(.white)
-//                        )
-                    
                     Text(hostsRoomViewModel.roomModel.roomName.isEmpty ? "Room Name" : hostsRoomViewModel.roomModel.roomName)
                         .foregroundColor(.white)
                         .bold()
@@ -41,8 +36,11 @@ struct HostsRoom: View {
                     Image(systemName: "pencil")
                         .foregroundColor(.white)
                     
-                    
                     Spacer()
+                    
+                    Image(systemName: "rectangle.portrait.and.arrow.forward")
+                        .foregroundColor(.white)
+                        .scaleEffect(x: -1, y: 1)
                 }
                 .padding(.horizontal)
                 
@@ -56,6 +54,55 @@ struct HostsRoom: View {
                     Spacer()
                 }
                 .padding(.horizontal)
+                .padding(.bottom)
+                
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(hostsRoomViewModel.roomModel.roomMembers, id: \.self) { member in
+                            Text(member.split(separator: "-")[1])
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .bold()
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(.white)
+                                )
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                
+                VStack (spacing: 0) {
+                    HStack {
+                        Text("Tasks")
+                            .foregroundColor(.black)
+                            .font(.title)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Button {
+                            showTaskCreationSheet = true
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .resizable()
+                                .foregroundColor(.black)
+                                .frame(width: 20, height: 20)
+                        }
+
+                    }
+                    
+                    ForEach(taskManager.tasks, id: \.id) { task in
+                        TaskView(task: task)
+                    }
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.white)
+                )
+                .padding()
                 
                 Spacer()
                 
@@ -81,6 +128,11 @@ struct HostsRoom: View {
                 EnterRoomNameWidget(roomName: $hostsRoomViewModel.roomModel.roomName, isOpen: $showEnterRoomNameWidget)
                     .transition(.opacity)
             }
+            
+            if showTaskCreationSheet, let id = hostsRoomViewModel.roomModel.id {
+                TaskCreationView(taskManager: taskManager, isOpen: $showTaskCreationSheet, roomID: id)
+                    .transition(.opacity)
+            }
         }
         .sheet(isPresented: $showChatView, content: {
             if let roomID = hostsRoomViewModel.roomModel.id {
@@ -99,6 +151,7 @@ struct HostsRoom: View {
             guard let roomID = hostsRoomViewModel.roomModel.id else { return }
             
             messageManager.getMessage(roomID: roomID)
+            taskManager.getTask(roomID: roomID)
         }
         .background(
             customBlue
@@ -108,5 +161,5 @@ struct HostsRoom: View {
 }
 
 #Preview {
-    HostsRoom(messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
+    HostsRoom(taskManager: TaskManager(), messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
 }

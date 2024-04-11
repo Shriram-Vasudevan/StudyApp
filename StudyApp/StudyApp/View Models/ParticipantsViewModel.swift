@@ -14,6 +14,7 @@ import FirebaseStorage
 class ParticipantsViewModel: ObservableObject {
     @Published var roomModel: RoomModel
     @Published private(set) var messages: [Message] = []
+    @Published private(set) var tasks: [TaskModel] = []
     
     let db = Firestore.firestore()
     let storage = Storage.storage()
@@ -76,4 +77,5 @@ class ParticipantsViewModel: ObservableObject {
             print("failed to send message")
         }
     }
+
 }

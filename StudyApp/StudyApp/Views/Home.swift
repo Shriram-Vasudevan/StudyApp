@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Home: View {
+    @StateObject var taskManager = TaskManager()
     @StateObject var messageManager = MessageManager()
     @ObservedObject var homeViewModel = HomeViewModel()
     var authenticationManager = AuthenticationManager()
@@ -28,7 +29,7 @@ struct Home: View {
             ZStack {
                 VStack {
                     HStack {
-                        Text("Hello Shriram")
+                        Text(homeViewModel.getDisplayName())
                             .foregroundColor(.white)
                             .font(.largeTitle)
                             .bold()
@@ -109,11 +110,11 @@ struct Home: View {
             }
             .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
                 if let roomModel = self.roomModel {
-                    ParticipantsView(messageManager: messageManager, participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
+                    ParticipantsView(taskManager: TaskManager(), messageManager: messageManager, participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
+                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
             })
             .background(
                 customBlue

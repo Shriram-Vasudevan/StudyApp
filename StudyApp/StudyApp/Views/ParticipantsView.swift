@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ParticipantsView: View {
+    @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
     @ObservedObject var participantsViewModel: ParticipantsViewModel
     
@@ -16,22 +17,25 @@ struct ParticipantsView: View {
     
     @State var showChatView: Bool = false
     
+    @State var showTaskCreationSheet: Bool = false
+    
     var body: some View {
         ZStack {
             VStack {
                 HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.forward")
-                        .foregroundColor(.white)
-                        .scaleEffect(x: -1, y: 1)
-                    
                     Text(participantsViewModel.roomModel.roomName.isEmpty ? "Room Name" : participantsViewModel.roomModel.roomName)
                         .foregroundColor(.white)
                         .bold()
                         .font(.title)
                     
                     Spacer()
+                    
+                    Image(systemName: "rectangle.portrait.and.arrow.forward")
+                        .foregroundColor(.white)
+                        .scaleEffect(x: -1, y: 1)
                 }
                 .padding(.horizontal)
+                .padding(.bottom)
                 
                 HStack {
                     ForEach(participantsViewModel.roomModel.roomMembers, id: \.self) { member in
@@ -46,6 +50,38 @@ struct ParticipantsView: View {
                             )
                     }
                 }
+                .padding(.horizontal)
+                
+                VStack (spacing: 0) {
+                    HStack {
+                        Text("Tasks")
+                            .foregroundColor(.black)
+                            .font(.title)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Button {
+                            showTaskCreationSheet = true
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .resizable()
+                                .foregroundColor(.black)
+                                .frame(width: 20, height: 20)
+                        }
+
+                    }
+                    
+                    ForEach(participantsViewModel.tasks, id: \.id) { task in
+                        TaskView(task: task)
+                    }
+                }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.white)
+                )
+                .padding()
                 
                 Spacer()
                 
@@ -65,6 +101,11 @@ struct ParticipantsView: View {
                     })
                 }
                 .padding(.horizontal)
+            }
+            
+            if showTaskCreationSheet, let id = participantsViewModel.roomModel.id {
+                TaskCreationView(taskManager: taskManager, isOpen: $showTaskCreationSheet, roomID: id)
+                    .transition(.opacity)
             }
         }
         .sheet(isPresented: $showChatView, content: {
@@ -86,5 +127,5 @@ struct ParticipantsView: View {
 }
 
 #Preview {
-    ParticipantsView(messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: ["fewfwdfrwe=Shriram"])))
+    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: ["fewfwdfrwe=Shriram"])))
 }

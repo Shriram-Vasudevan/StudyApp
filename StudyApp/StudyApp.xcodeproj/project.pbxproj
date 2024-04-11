@@ -73,6 +73,10 @@
 		99FC245A2BC60C8700F9CE4E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24592BC60C8700F9CE4E /* Message.swift */; };
 		99FC245C2BC6108A00F9CE4E /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC245B2BC6108A00F9CE4E /* ChatBubble.swift */; };
 		99FC245E2BC611CF00F9CE4E /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC245D2BC611CF00F9CE4E /* ChatView.swift */; };
+		99FC24622BC8542B00F9CE4E /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24612BC8542B00F9CE4E /* TaskModel.swift */; };
+		99FC24642BC8676C00F9CE4E /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24632BC8676C00F9CE4E /* TaskView.swift */; };
+		99FC24662BC8758600F9CE4E /* TaskCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24652BC8758600F9CE4E /* TaskCreationView.swift */; };
+		99FC24682BC875CA00F9CE4E /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24672BC875CA00F9CE4E /* TaskManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +118,10 @@
 		99FC24592BC60C8700F9CE4E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		99FC245B2BC6108A00F9CE4E /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		99FC245D2BC611CF00F9CE4E /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		99FC24612BC8542B00F9CE4E /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
+		99FC24632BC8676C00F9CE4E /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		99FC24652BC8758600F9CE4E /* TaskCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCreationView.swift; sourceTree = "<group>"; };
+		99FC24672BC875CA00F9CE4E /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +221,8 @@
 				99FC24532BC6051700F9CE4E /* PagesHolderView.swift */,
 				99FC245B2BC6108A00F9CE4E /* ChatBubble.swift */,
 				99FC245D2BC611CF00F9CE4E /* ChatView.swift */,
+				99FC24632BC8676C00F9CE4E /* TaskView.swift */,
+				99FC24652BC8758600F9CE4E /* TaskCreationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -223,6 +233,7 @@
 				99FC24432BC31CEB00F9CE4E /* RoomModel.swift */,
 				99FC24552BC6053500F9CE4E /* PageType.swift */,
 				99FC24592BC60C8700F9CE4E /* Message.swift */,
+				99FC24612BC8542B00F9CE4E /* TaskModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -243,6 +254,7 @@
 				99FC24262BC312FD00F9CE4E /* AuthenticationManager.swift */,
 				99FC24282BC3139000F9CE4E /* KeyboardResponder.swift */,
 				99FC24572BC60C6B00F9CE4E /* MessageManager.swift */,
+				99FC24672BC875CA00F9CE4E /* TaskManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -383,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99FC244C2BC3601100F9CE4E /* ParticipantsView.swift in Sources */,
+				99FC24622BC8542B00F9CE4E /* TaskModel.swift in Sources */,
 				99FC24212BC30C6700F9CE4E /* HostsRoom.swift in Sources */,
 				99FC24542BC6051800F9CE4E /* PagesHolderView.swift in Sources */,
 				99FC242B2BC313BD00F9CE4E /* RegisterView.swift in Sources */,
@@ -396,6 +409,9 @@
 				99FC24442BC31CEB00F9CE4E /* RoomModel.swift in Sources */,
 				99FC24272BC312FD00F9CE4E /* AuthenticationManager.swift in Sources */,
 				99FC24482BC3571400F9CE4E /* HostsRoomViewModel.swift in Sources */,
+				99FC24662BC8758600F9CE4E /* TaskCreationView.swift in Sources */,
+				99FC24682BC875CA00F9CE4E /* TaskManager.swift in Sources */,
+				99FC24642BC8676C00F9CE4E /* TaskView.swift in Sources */,
 				99FC245C2BC6108A00F9CE4E /* ChatBubble.swift in Sources */,
 				99FC23D62BC20A0300F9CE4E /* Home.swift in Sources */,
 				99FC24462BC326C000F9CE4E /* EnterRoomNameWidget.swift in Sources */,

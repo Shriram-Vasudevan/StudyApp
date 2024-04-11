@@ -11,6 +11,12 @@ import FirebaseFirestore
 import FirebaseAuth
 
 class HomeViewModel: ObservableObject {
+    func getDisplayName() -> String {
+        guard let user = Auth.auth().currentUser, let userDisplay = user.displayName else { return "Hello!"}
+        
+        return userDisplay
+    }
+    
     func joinRoom(roomID: String) async throws -> RoomModel {
         do {
             guard let user = Auth.auth().currentUser, let displayName = user.displayName else {
