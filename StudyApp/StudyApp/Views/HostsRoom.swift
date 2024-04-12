@@ -21,6 +21,8 @@ struct HostsRoom: View {
     @State var showTaskCreationSheet: Bool = false
     @State var task: String = ""
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         ZStack {
             VStack {
@@ -38,9 +40,16 @@ struct HostsRoom: View {
                     
                     Spacer()
                     
-                    Image(systemName: "rectangle.portrait.and.arrow.forward")
-                        .foregroundColor(.white)
-                        .scaleEffect(x: -1, y: 1)
+                    Button {
+                        hostsRoomViewModel.closeRoom()
+                        
+                        dismiss()
+                    } label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.forward")
+                            .foregroundColor(.white)
+                            .scaleEffect(x: -1, y: 1)
+                    }
+
                 }
                 .padding(.horizontal)
                 
@@ -59,15 +68,25 @@ struct HostsRoom: View {
                 ScrollView(.horizontal) {
                     HStack {
                         ForEach(hostsRoomViewModel.roomModel.roomMembers, id: \.self) { member in
-                            Text(member.split(separator: "-")[1])
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .bold()
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .fill(.white)
-                                )
+                            HStack {
+                                Image("Man Smiling")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 30, height: 30)
+                                    .cornerRadius(5)
+                                    .clipped()
+                                    
+                                
+                                Text(member.split(separator: "-")[1])
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .bold()
+                            }
+                            .padding(10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.white)
+                            )
                         }
                     }
                 }
@@ -94,6 +113,7 @@ struct HostsRoom: View {
                     }
                     
                     ForEach(taskManager.tasks, id: \.id) { task in
+                        Divider()
                         TaskView(task: task)
                     }
                 }
@@ -154,7 +174,10 @@ struct HostsRoom: View {
             taskManager.getTask(roomID: roomID)
         }
         .background(
-            customBlue
+            Image("Jungle")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
         )
         .navigationBarBackButtonHidden()
     }

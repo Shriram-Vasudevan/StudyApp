@@ -23,7 +23,9 @@ class HostsRoomViewModel: ObservableObject {
     }
     
     func closeRoom() {
+        guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
         
+        db.collection("Rooms").document(roomID).delete()
     }
     
     func updateRoomName(roomName: String) async {
@@ -62,7 +64,11 @@ class HostsRoomViewModel: ObservableObject {
                 do {
                     let roomModel = try document.data(as: RoomModel.self)
                     self.roomModel = roomModel
+                    
+                    print("worked")
+                    print(self.roomModel.roomMembers)
                 } catch {
+                    print(error.localizedDescription)
                     return
                 }
           }

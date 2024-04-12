@@ -13,7 +13,7 @@ struct RoomModel: Identifiable, Codable {
     var host: String
     var roomName: String
     var roomMembers: [String]
-    var timer: Double?
-    var backgroundImage: String?
+//    var timer: Double?
+//    var backgroundImage: String?
     
 }

@@ -19,6 +19,8 @@ struct ParticipantsView: View {
     
     @State var showTaskCreationSheet: Bool = false
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         ZStack {
             VStack {
@@ -30,24 +32,45 @@ struct ParticipantsView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "rectangle.portrait.and.arrow.forward")
-                        .foregroundColor(.white)
-                        .scaleEffect(x: -1, y: 1)
+                    Button {
+                        Task {
+                            await participantsViewModel.leaveRoom()
+                        }
+                        
+                        dismiss()
+  
+                    } label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.forward")
+                            .foregroundColor(.white)
+                            .scaleEffect(x: -1, y: 1)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
                 
-                HStack {
-                    ForEach(participantsViewModel.roomModel.roomMembers, id: \.self) { member in
-                        Text(member.split(separator: "-")[1])
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .bold()
-                            .padding()
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(participantsViewModel.roomModel.roomMembers, id: \.self) { member in
+                            HStack {
+                                Image("Man Smiling")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 30, height: 30)
+                                    .cornerRadius(5)
+                                    .clipped()
+                                    
+                                
+                                Text(member.split(separator: "-")[1])
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                    .bold()
+                            }
+                            .padding(10)
                             .background(
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(.white)
                             )
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -118,9 +141,13 @@ struct ParticipantsView: View {
             guard let roomID = participantsViewModel.roomModel.id else { return }
             
             messageManager.getMessage(roomID: roomID)
+            taskManager.getTask(roomID: roomID)
         }
         .background(
-            customBlue
+            Image("Jungle")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
         )
         .navigationBarBackButtonHidden()
     }

@@ -59,9 +59,7 @@ struct TaskCreationView: View {
                         offset = 1000
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        isOpen = false
-                    }
+                    isOpen = false
                 }) {
                     Text("Enter")
                         .fontWeight(.bold)

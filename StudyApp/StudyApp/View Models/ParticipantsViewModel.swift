@@ -23,11 +23,24 @@ class ParticipantsViewModel: ObservableObject {
         self.roomModel = roomModel
     }
 
+    func leaveRoom() async {
+        do {
+            guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
+            
+            try await db.collection("Rooms").document(roomID).updateData(
+                [
+                    "roomMembers" : FieldValue.arrayRemove(["\(user.uid)-\(userDisplayName)"])
+                ]
+            )
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     func listenForRoomUpdates() {
         guard let roomID = roomModel.id else { return }
-        let dbReference = Firestore.firestore()
         
-        dbReference.collection("Rooms").document(roomID)
+        db.collection("Rooms").document(roomID)
             .addSnapshotListener { documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     print("Error fetching document: \(error!)")
