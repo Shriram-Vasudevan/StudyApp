@@ -10,7 +10,11 @@ import Firebase
 import FirebaseAuth
 
 struct TaskView: View {
+    var roomID: String
     var task: TaskModel
+    var taskManager: TaskManager
+    
+    var taskCompleted: (String) -> Void
     
     var body: some View {
         if task.senderID == Auth.auth().currentUser?.uid {
@@ -18,7 +22,23 @@ struct TaskView: View {
                 Text("\(task.senderName): \(task.task)")
                     .font(.headline)
                     .foregroundColor(.black)
+                
                 Spacer()
+                
+                Button {
+                    taskManager.deleteTask(taskID: task.id, roomID: roomID)
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+                
+                Button {
+                    taskCompleted(task.id)
+                } label: {
+                    Image(systemName: "flag.checkered")
+                        .foregroundColor(.black)
+                }
+
             }
             .padding(.vertical)
             .background(
@@ -42,5 +62,5 @@ struct TaskView: View {
 }
 
 #Preview {
-    TaskView(task: TaskModel(id: "", task: "Need to study for Chem", senderID: "", senderName: "Shriram", timestamp: Date()))
+    TaskView(roomID: "", task: TaskModel(id: "", task: "Need to study for Chem", senderID: "", senderName: "Shriram", timestamp: Date()), taskManager: TaskManager(), taskCompleted: {taskID in})
 }

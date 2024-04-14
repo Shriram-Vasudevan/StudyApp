@@ -77,6 +77,7 @@
 		99FC24642BC8676C00F9CE4E /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24632BC8676C00F9CE4E /* TaskView.swift */; };
 		99FC24662BC8758600F9CE4E /* TaskCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24652BC8758600F9CE4E /* TaskCreationView.swift */; };
 		99FC24682BC875CA00F9CE4E /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24672BC875CA00F9CE4E /* TaskManager.swift */; };
+		99FC246A2BCC54A600F9CE4E /* ScoreWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,6 +123,7 @@
 		99FC24632BC8676C00F9CE4E /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		99FC24652BC8758600F9CE4E /* TaskCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCreationView.swift; sourceTree = "<group>"; };
 		99FC24672BC875CA00F9CE4E /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 				99FC245D2BC611CF00F9CE4E /* ChatView.swift */,
 				99FC24632BC8676C00F9CE4E /* TaskView.swift */,
 				99FC24652BC8758600F9CE4E /* TaskCreationView.swift */,
+				99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				99FC23D62BC20A0300F9CE4E /* Home.swift in Sources */,
 				99FC24462BC326C000F9CE4E /* EnterRoomNameWidget.swift in Sources */,
 				99FC24562BC6053500F9CE4E /* PageType.swift in Sources */,
+				99FC246A2BCC54A600F9CE4E /* ScoreWidget.swift in Sources */,
 				99FC23C32BC1FAB400F9CE4E /* StudyAppApp.swift in Sources */,
 				99FC245A2BC60C8700F9CE4E /* Message.swift in Sources */,
 				99FC23E92BC250DC00F9CE4E /* JoinRoom.swift in Sources */,
@@ -560,8 +564,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -590,8 +593,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

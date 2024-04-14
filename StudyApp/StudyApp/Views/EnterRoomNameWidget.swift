@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct EnterRoomNameWidget: View {
-    @Binding var roomName: String
+    @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
+    @State var roomName: String = ""
     @Binding var isOpen: Bool
     
     @State var offset: CGFloat = 1000
@@ -21,11 +22,15 @@ struct EnterRoomNameWidget: View {
         ZStack {
             Color.black.opacity(0.5)
                 .onTapGesture {
-                    withAnimation (.spring(duration: 1)){
-                        offset = 1000
+                    Task {
+                        await hostsRoomViewModel.updateRoomName(roomName: roomName)
                     }
                     
-                    isOpen = false
+                    withAnimation (.spring(duration: 1)){
+                        offset = 1000
+                        
+                        isOpen = false
+                    }
                 }
                 .ignoresSafeArea()
             
@@ -65,5 +70,5 @@ struct EnterRoomNameWidget: View {
 }
 
 #Preview {
-    EnterRoomNameWidget(roomName: .constant(""), isOpen: .constant(true))
+    EnterRoomNameWidget(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [])), isOpen: .constant(true))
 }

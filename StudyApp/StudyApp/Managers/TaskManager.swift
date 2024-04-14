@@ -48,4 +48,11 @@ class TaskManager: ObservableObject {
         }
     }
     
+    func deleteTask(taskID: String, roomID: String) {
+        db.collection("Rooms").document(roomID).collection("tasks").document(taskID).delete()
+        tasks.removeAll { Task in
+            Task.id == taskID
+        }
+    }
+    
 }

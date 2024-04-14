@@ -12,7 +12,7 @@ import FirebaseAuth
 
 class HomeViewModel: ObservableObject {
     func getDisplayName() -> String {
-        guard let user = Auth.auth().currentUser, let userDisplay = user.displayName else { return "Hello!"}
+        guard let user = Auth.auth().currentUser, let userDisplay = user.displayName else { return "Dave!"}
         
         return userDisplay
     }
@@ -30,7 +30,7 @@ class HomeViewModel: ObservableObject {
             var roomModel = try snapshot.data(as: RoomModel.self)
             
             await addUserToRoom(roomModel: roomModel)
-            roomModel.roomMembers.append("\(user.uid)-\(displayName)")
+            roomModel.roomMembers.append(RoomMember(userID: user.uid, displayName: displayName, score: 0))
             return roomModel
         } catch {
             print(error.localizedDescription)
@@ -61,7 +61,7 @@ class HomeViewModel: ObservableObject {
             
             try await dbRef.collection("Rooms").document(roomID).updateData(
                 [
-                    "roomMembers" : FieldValue.arrayUnion(["\(user.uid)-\(userDisplayName)"])
+                    "roomMembers" : FieldValue.arrayUnion([RoomMember(userID: user.uid, displayName: userDisplayName, score: 0)])
                 ]
             )
         } catch {
@@ -76,10 +76,16 @@ class HomeViewModel: ObservableObject {
             
             let roomID = generateRoomID()
             
+            let roomMember: [String: Any] = [
+                    "userID": user.uid,
+                    "displayName": userDisplayName,
+                    "score": 0
+            ]
+            
             try await dbReference.collection("Rooms").document(roomID).setData(
                 [
                     "host" : user.uid,
-                    "roomMembers": ["\(user.uid)-\(userDisplayName)"],
+                    "roomMembers": [roomMember],
                     "roomName": "Room Name"
                 ]
             )

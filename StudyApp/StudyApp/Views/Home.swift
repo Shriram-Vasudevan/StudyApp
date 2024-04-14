@@ -18,20 +18,23 @@ struct Home: View {
     @State var navigateToParticipantRoom: Bool = false
     @State var showEnterRoomIDView: Bool = false
     
+    @State var roomID: String = ""
+    
     @State var roomInformation: (String, String, String) = ("", "", "")
     @State var roomModel: RoomModel?
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
     
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack {
+                VStack (spacing: 0) {
                     HStack {
-                        Text(homeViewModel.getDisplayName())
-                            .foregroundColor(.white)
-                            .font(.largeTitle)
+                        Text("Hello \(homeViewModel.getDisplayName())")
+                            .foregroundColor(.black)
+                            .font(.custom("EtruscoNowCondensed Bold", size: 40))
                             .bold()
                         
                         Spacer()
@@ -42,21 +45,74 @@ struct Home: View {
                             }
                         }, label: {
                             Image(systemName: "person.fill")
+                                .resizable()
                                 .foregroundColor(.black)
-                                .padding(10)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(.white)
-                                )
+                                .frame(width: 20, height: 20)
                         })
                     }
                     .padding(.horizontal)
-                    .padding(.bottom)
                     
-                    
+                    ScrollView {
+                        VStack (spacing: 0) {
+                            Button(action: {
+                                showEnterRoomIDView = true
+                            }, label: {
+                                Image("TeensStudying")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height:  UIScreen.main.bounds.height / 4)
+                                    .cornerRadius(10)
+                                    .overlay (
+                                        Text("Join a Room")
+                                            .font(.custom("Sailec Bold", size: 25))
+                                            .foregroundColor(.white)
+                                            .padding()
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 5)
+                                                    .fill(.black.opacity(0.4))
+                                            ),
+                                        alignment: .center
+                                    )
+                                    .padding(.horizontal)
+                            })
+                            
+                            HStack {
+                                Text("Friends")
+                                    .foregroundColor(.black)
+                                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                    .bold()
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                            HStack {
+                                Text("Your Stats")
+                                    .foregroundColor(.black)
+                                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                    .bold()
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            
+                        }
+                        
+                    }
+                }
+                
+                if showEnterRoomIDView {
+                    EnterRoomIDWidget(homeViewModel: homeViewModel, isOpen: $showEnterRoomIDView) { roomModel in
+                        self.roomModel = roomModel
+                        navigateToParticipantRoom = true
+                    }
+                    .transition(.opacity)
+                }
+                
+                VStack {
                     Spacer()
                     
-                    Button(action: {
+                    Button {
                         Task {
                             do {
                                 let roomInformation = try await homeViewModel.createRoom()
@@ -67,46 +123,20 @@ struct Home: View {
                                 print(error.localizedDescription)
                             }
                         }
-                    }, label: {
-                        VStack {
-                            Text("Create Room")
-                                .foregroundColor(.black)
-                                .bold()
-                        }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.white)
-                        )
-                    })
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        showEnterRoomIDView = true
-                    }, label: {
-                        VStack {
-                            Text("Join Room")
-                                .foregroundColor(.black)
-                                .bold()
-                        }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.white)
-                        )
-                    })
-                    
-                    Spacer()
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .foregroundColor(.white)
+                            .frame(width: 23, height: 23)
+                            .padding()
+                            .background(
+                                Circle()
+                                    .fill(customBlue)
+                            )
+                            .padding()
+                    }
                 }
                 
-                if showEnterRoomIDView {
-                    EnterRoomIDWidget(homeViewModel: homeViewModel, isOpen: $showEnterRoomIDView) { roomModel in
-                        self.roomModel = roomModel
-                        navigateToParticipantRoom = true
-                    }
-                    .transition(.opacity)
-                }
             }
             .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
                 if let roomModel = self.roomModel {
@@ -114,10 +144,10 @@ struct Home: View {
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: ["\(roomInformation.1)-\(roomInformation.2)"])))
+                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [RoomMember(userID: roomInformation.1, displayName: roomInformation.2, score: 0)])))
             })
             .background(
-                customBlue
+                .white
             )
         }
     }

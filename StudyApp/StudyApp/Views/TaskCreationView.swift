@@ -26,9 +26,6 @@ struct TaskCreationView: View {
                     print("tapped outside")
                     withAnimation (.spring(duration: 1)){
                         offset = 1000
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         isOpen = false
                     }
                 }
@@ -57,9 +54,8 @@ struct TaskCreationView: View {
 
                     withAnimation (.spring(duration: 1)){
                         offset = 1000
+                        isOpen = false
                     }
-                    
-                    isOpen = false
                 }) {
                     Text("Enter")
                         .fontWeight(.bold)

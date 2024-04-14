@@ -12,8 +12,14 @@ struct RoomModel: Identifiable, Codable {
     @DocumentID var id: String?
     var host: String
     var roomName: String
-    var roomMembers: [String]
+    var roomMembers: [RoomMember]
 //    var timer: Double?
 //    var backgroundImage: String?
     
+}
+
+struct RoomMember: Codable, Hashable {
+    var userID: String
+    var displayName: String
+    var score: Int
 }

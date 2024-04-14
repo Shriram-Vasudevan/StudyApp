@@ -27,16 +27,28 @@ struct HostsRoom: View {
         ZStack {
             VStack {
                 HStack {
-                    Text(hostsRoomViewModel.roomModel.roomName.isEmpty ? "Room Name" : hostsRoomViewModel.roomModel.roomName)
-                        .foregroundColor(.white)
-                        .bold()
-                        .font(.title)
-                        .onTapGesture {
-                            showEnterRoomNameWidget = true
+                    VStack (alignment: .leading) {
+                        HStack {
+                            Text(hostsRoomViewModel.roomModel.roomName.isEmpty ? "Room Name" : hostsRoomViewModel.roomModel.roomName)
+                                .foregroundColor(.white)
+                                .bold()
+                                .font(.title)
+                                .onTapGesture {
+                                    showEnterRoomNameWidget = true
+                                }
+                            
+                            Image(systemName: "pencil")
+                                .foregroundColor(.white)
+                            
                         }
-                    
-                    Image(systemName: "pencil")
-                        .foregroundColor(.white)
+                        
+                        if let id = hostsRoomViewModel.roomModel.id {
+                            Text(id.isEmpty ? "Error Loading ID" : id)
+                                .font(.headline)
+                                .bold()
+                                .foregroundColor(.white)
+                        }
+                    }
                     
                     Spacer()
                     
@@ -48,22 +60,14 @@ struct HostsRoom: View {
                         Image(systemName: "rectangle.portrait.and.arrow.forward")
                             .foregroundColor(.white)
                             .scaleEffect(x: -1, y: 1)
+                            .padding()
+                            .background(
+                                Circle()
+                                    .fill(.gray.opacity(0.2))
+                            )
                     }
-
                 }
                 .padding(.horizontal)
-                
-                HStack {
-                    if let id = hostsRoomViewModel.roomModel.id {
-                        Text(id.isEmpty ? "Error Loading ID" : id)
-                            .font(.headline)
-                            .bold()
-                            .foregroundColor(.white)
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
                 
                 ScrollView(.horizontal) {
                     HStack {
@@ -77,7 +81,7 @@ struct HostsRoom: View {
                                     .clipped()
                                     
                                 
-                                Text(member.split(separator: "-")[1])
+                                Text(member.displayName)
                                     .font(.headline)
                                     .foregroundColor(.black)
                                     .bold()
@@ -92,60 +96,104 @@ struct HostsRoom: View {
                 }
                 .padding(.horizontal)
                 
-                VStack (spacing: 0) {
-                    HStack {
-                        Text("Tasks")
-                            .foregroundColor(.black)
-                            .font(.title)
-                            .bold()
-                        
-                        Spacer()
-                        
-                        Button {
-                            showTaskCreationSheet = true
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .foregroundColor(.black)
-                                .frame(width: 20, height: 20)
+                ScrollView(.vertical) {
+                    VStack (spacing: 0){
+                        VStack (spacing: 0) {
+                            HStack {
+                                Text("Leaderboard")
+                                    .foregroundColor(.black)
+                                    .font(.title)
+                                    .bold()
+                                
+                                Spacer()
+                                
+                            }
+                            
+                            ForEach(hostsRoomViewModel.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
+                                Divider()
+                                ScoreWidget(roomMember: member)
+                            }
                         }
-
-                    }
-                    
-                    ForEach(taskManager.tasks, id: \.id) { task in
-                        Divider()
-                        TaskView(task: task)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.white)
+                        )
+                        .padding()
+                        
+                        VStack (spacing: 0) {
+                            HStack {
+                                Text("Tasks")
+                                    .foregroundColor(.black)
+                                    .font(.title)
+                                    .bold()
+                                
+                                Spacer()
+                                
+                                Button {
+                                    showTaskCreationSheet = true
+                                } label: {
+                                    Image(systemName: "plus.circle")
+                                        .resizable()
+                                        .foregroundColor(.black)
+                                        .frame(width: 20, height: 20)
+                                }
+                            }
+                            
+                            if let roomID = hostsRoomViewModel.roomModel.id {
+                                ForEach(taskManager.tasks, id: \.id) { task in
+                                    Divider()
+                                    TaskView(roomID: roomID,task: task, taskManager: taskManager) { taskID in
+    
+                                    }
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.white)
+                        )
+                        .padding()
                     }
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(.white)
-                )
-                .padding()
-                
+
                 Spacer()
                 
                 HStack {
+                    Image("Jungle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 50, height: 50)
+                        .clipped()
+                        .cornerRadius(10)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.white, lineWidth: 2)
+                        }
+                    
                     Spacer()
                     
                     Button(action: {
                         showChatView = true
                     }, label: {
-                        Image(systemName: "message.fill")
-                            .foregroundColor(.black)
-                            .padding(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.white)
-                            )
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                            .frame(width: 52, height: 52)
+                            .overlay {
+                                Image(systemName: "message.fill")
+                                    .resizable()
+                                    .foregroundColor(.black)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 23, height: 24)
+                            }
                     })
                 }
                 .padding(.horizontal)
             }
             
             if showEnterRoomNameWidget {
-                EnterRoomNameWidget(roomName: $hostsRoomViewModel.roomModel.roomName, isOpen: $showEnterRoomNameWidget)
+                EnterRoomNameWidget(hostsRoomViewModel: hostsRoomViewModel, isOpen: $showEnterRoomNameWidget)
                     .transition(.opacity)
             }
             
@@ -159,11 +207,6 @@ struct HostsRoom: View {
                 ChatView(messageManager: messageManager, roomID: roomID)
             }
         })
-        .onChange(of: hostsRoomViewModel.roomModel.roomName) { roomName in
-            Task {
-                await hostsRoomViewModel.updateRoomName(roomName: roomName)
-            }
-        }
         .onAppear {
             showEnterRoomNameWidget = true
             hostsRoomViewModel.listenForRoomUpdates()
@@ -184,5 +227,5 @@ struct HostsRoom: View {
 }
 
 #Preview {
-    HostsRoom(taskManager: TaskManager(), messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: ["rffw8efy948yr9r8-Shriram"])))
+    HostsRoom(taskManager: TaskManager(), messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: [])))
 }

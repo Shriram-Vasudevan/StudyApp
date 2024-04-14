@@ -60,7 +60,7 @@ struct ParticipantsView: View {
                                     .clipped()
                                     
                                 
-                                Text(member.split(separator: "-")[1])
+                                Text(member.displayName)
                                     .font(.headline)
                                     .foregroundColor(.black)
                                     .bold()
@@ -75,36 +75,67 @@ struct ParticipantsView: View {
                 }
                 .padding(.horizontal)
                 
-                VStack (spacing: 0) {
-                    HStack {
-                        Text("Tasks")
-                            .foregroundColor(.black)
-                            .font(.title)
-                            .bold()
-                        
-                        Spacer()
-                        
-                        Button {
-                            showTaskCreationSheet = true
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .foregroundColor(.black)
-                                .frame(width: 20, height: 20)
+                ScrollView(.vertical) {
+                    VStack (spacing: 0) {
+                        VStack (spacing: 0) {
+                            HStack {
+                                Text("Leaderboard")
+                                    .foregroundColor(.black)
+                                    .font(.title)
+                                    .bold()
+                                
+                                Spacer()
+                                
+                            }
+                            
+                            ForEach(participantsViewModel.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
+                                Divider()
+                                ScoreWidget(roomMember: member)
+                            }
                         }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.white)
+                        )
+                        .padding()
+                        
+                        VStack (spacing: 0) {
+                            HStack {
+                                Text("Tasks")
+                                    .foregroundColor(.black)
+                                    .font(.title)
+                                    .bold()
+                                
+                                Spacer()
+                                
+                                Button {
+                                    showTaskCreationSheet = true
+                                } label: {
+                                    Image(systemName: "plus.circle")
+                                        .resizable()
+                                        .foregroundColor(.black)
+                                        .frame(width: 20, height: 20)
+                                }
 
-                    }
-                    
-                    ForEach(participantsViewModel.tasks, id: \.id) { task in
-                        TaskView(task: task)
+                            }
+                            
+                            if let roomID = participantsViewModel.roomModel.id {
+                                ForEach(taskManager.tasks, id: \.id) { task in
+                                    TaskView(roomID: roomID, task: task, taskManager: taskManager) { taskID in
+                                        
+                                    }
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.white)
+                        )
+                        .padding()
                     }
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(.white)
-                )
-                .padding()
                 
                 Spacer()
                 
@@ -154,5 +185,5 @@ struct ParticipantsView: View {
 }
 
 #Preview {
-    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: ["fewfwdfrwe=Shriram"])))
+    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [])))
 }

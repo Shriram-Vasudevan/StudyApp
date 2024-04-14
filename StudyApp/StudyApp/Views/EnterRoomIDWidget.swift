@@ -28,9 +28,9 @@ struct EnterRoomIDWidget: View {
                     print("tapped outside")
                     withAnimation (.spring(duration: 1)){
                         offset = 1000
+                        
+                        isOpen = false
                     }
-                    
-                    isOpen = false
                 }
                 .ignoresSafeArea()
             
@@ -63,9 +63,9 @@ struct EnterRoomIDWidget: View {
                                     
                                     withAnimation (.spring(duration: 1)){
                                         offset = 1000
+                                        
+                                        isOpen = false
                                     }
-                                    
-                                    isOpen = false
                                 } catch {
                                     print("failed")
                                     //nothing for now
@@ -78,7 +78,7 @@ struct EnterRoomIDWidget: View {
                         }
                     }
                 } label: {
-                    Text("Go")
+                    Text("Enter")
                         .foregroundColor(.white)
                         .font(.headline)
                         .bold()
