@@ -14,7 +14,7 @@ struct TaskView: View {
     var task: TaskModel
     var taskManager: TaskManager
     
-    var taskCompleted: (String) -> Void
+    var taskCompleted: (TaskModel) -> Void
     
     var body: some View {
         if task.senderID == Auth.auth().currentUser?.uid {
@@ -33,7 +33,7 @@ struct TaskView: View {
                 }
                 
                 Button {
-                    taskCompleted(task.id)
+                    taskCompleted(task)
                 } label: {
                     Image(systemName: "flag.checkered")
                         .foregroundColor(.black)

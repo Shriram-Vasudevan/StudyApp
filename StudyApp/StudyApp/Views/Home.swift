@@ -144,7 +144,7 @@ struct Home: View {
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [RoomMember(userID: roomInformation.1, displayName: roomInformation.2, score: 0)])))
+                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [RoomMember(userID: roomInformation.1, displayName: roomInformation.2, score: 0)], backgroundImage: "Jungle")))
             })
             .background(
                 .white

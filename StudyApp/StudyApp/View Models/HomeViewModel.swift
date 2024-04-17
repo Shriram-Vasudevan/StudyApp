@@ -86,7 +86,8 @@ class HomeViewModel: ObservableObject {
                 [
                     "host" : user.uid,
                     "roomMembers": [roomMember],
-                    "roomName": "Room Name"
+                    "roomName": "Room Name",
+                    "backgroundImage": "Jungle"
                 ]
             )
             

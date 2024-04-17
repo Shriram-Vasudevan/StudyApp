@@ -122,8 +122,10 @@ struct ParticipantsView: View {
                             
                             if let roomID = participantsViewModel.roomModel.id {
                                 ForEach(taskManager.tasks, id: \.id) { task in
-                                    TaskView(roomID: roomID, task: task, taskManager: taskManager) { taskID in
-                                        
+                                    TaskView(roomID: roomID, task: task, taskManager: taskManager) { task in
+                                        Task {
+                                            await taskManager.taskCompleted(task: task, roomID: roomID)
+                                        }
                                     }
                                 }
                             }
@@ -164,7 +166,7 @@ struct ParticipantsView: View {
         }
         .sheet(isPresented: $showChatView, content: {
             if let roomID = participantsViewModel.roomModel.id {
-                ChatView(messageManager: messageManager, roomID: roomID)
+                ChatView(messageManager: messageManager, roomID: roomID, roomBackground: participantsViewModel.roomModel.backgroundImage)
             }
         })
         .onAppear {
@@ -185,5 +187,5 @@ struct ParticipantsView: View {
 }
 
 #Preview {
-    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [])))
+    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "Jungle")))
 }

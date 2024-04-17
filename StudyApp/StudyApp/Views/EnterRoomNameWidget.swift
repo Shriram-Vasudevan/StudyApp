@@ -70,5 +70,5 @@ struct EnterRoomNameWidget: View {
 }
 
 #Preview {
-    EnterRoomNameWidget(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [])), isOpen: .constant(true))
+    EnterRoomNameWidget(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "Jungle")), isOpen: .constant(true))
 }

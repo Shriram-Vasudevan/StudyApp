@@ -12,15 +12,13 @@ struct ChatView: View {
     @State private var message: String = ""
     
     var roomID: String
+    var roomBackground: String
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
     
     var body: some View {
         ZStack {
-            
-            customBlue.edgesIgnoringSafeArea(.all)
-            
             VStack {
                 HStack {
                     Text("Chat")
@@ -70,9 +68,15 @@ struct ChatView: View {
                 .padding([.leading, .trailing, .bottom], 12)
             }
         }
+        .background(
+            Image(roomBackground)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+        )
     }
 }
 
 #Preview {
-    ChatView(messageManager: MessageManager(), roomID: "")
+    ChatView(messageManager: MessageManager(), roomID: "", roomBackground: "Jungle")
 }

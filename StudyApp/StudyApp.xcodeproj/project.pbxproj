@@ -78,6 +78,7 @@
 		99FC24662BC8758600F9CE4E /* TaskCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24652BC8758600F9CE4E /* TaskCreationView.swift */; };
 		99FC24682BC875CA00F9CE4E /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24672BC875CA00F9CE4E /* TaskManager.swift */; };
 		99FC246A2BCC54A600F9CE4E /* ScoreWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */; };
+		99FC248D2BD0820300F9CE4E /* RoomModelArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC248C2BD0820300F9CE4E /* RoomModelArrayExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		99FC24652BC8758600F9CE4E /* TaskCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCreationView.swift; sourceTree = "<group>"; };
 		99FC24672BC875CA00F9CE4E /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWidget.swift; sourceTree = "<group>"; };
+		99FC248C2BD0820300F9CE4E /* RoomModelArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModelArrayExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +188,7 @@
 		99FC23C12BC1FAB400F9CE4E /* StudyApp */ = {
 			isa = PBXGroup;
 			children = (
+				99FC248B2BD081F200F9CE4E /* Extensions */,
 				99FC24422BC314C700F9CE4E /* Info.plist */,
 				99FC23D72BC24A1800F9CE4E /* GoogleService-Info.plist */,
 				99FC23D42BC1FADA00F9CE4E /* Fonts */,
@@ -278,6 +281,14 @@
 				99FC242C2BC314B700F9CE4E /* times new roman.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		99FC248B2BD081F200F9CE4E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				99FC248C2BD0820300F9CE4E /* RoomModelArrayExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -403,6 +414,7 @@
 				99FC24542BC6051800F9CE4E /* PagesHolderView.swift in Sources */,
 				99FC242B2BC313BD00F9CE4E /* RegisterView.swift in Sources */,
 				99FC245E2BC611CF00F9CE4E /* ChatView.swift in Sources */,
+				99FC248D2BD0820300F9CE4E /* RoomModelArrayExtension.swift in Sources */,
 				99FC24502BC3631600F9CE4E /* EnterRoomIDWidget.swift in Sources */,
 				99FC24522BC3646000F9CE4E /* ParticipantsViewModel.swift in Sources */,
 				99FC24582BC60C6B00F9CE4E /* MessageManager.swift in Sources */,
