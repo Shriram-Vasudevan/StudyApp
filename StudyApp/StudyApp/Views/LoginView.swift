@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import FirebaseAuth
 
 struct LoginView: View {
     @ObservedObject var authenticationManager = AuthenticationManager()
@@ -143,6 +144,11 @@ struct LoginView: View {
         
         if (!emailError && !passwordError) {
             authenticationManager.signIn(email: email, password: password, completionHandler: {
+                Task {
+                    if let userID = Auth.auth().currentUser?.uid {
+                        await authenticationManager.uploadProfilePicture(userID: userID)
+                    }
+                }
                 pageType = .main
             })
         }
