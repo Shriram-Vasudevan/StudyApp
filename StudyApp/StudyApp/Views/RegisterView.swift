@@ -59,7 +59,7 @@ struct RegisterView: View {
                                 .shadow(radius: 10)
                         }
                         else {
-                            Image("Jungle")
+                            Image("JungleLake")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 175, height: 175)

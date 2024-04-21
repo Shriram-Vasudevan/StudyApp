@@ -26,7 +26,7 @@ struct EnterRoomIDWidget: View {
             Color.black.opacity(0.5)
                 .onTapGesture {
                     print("tapped outside")
-                    withAnimation (.spring(duration: 1)){
+                    withAnimation (.spring()){
                         offset = 1000
                         
                         isOpen = false
@@ -61,7 +61,7 @@ struct EnterRoomIDWidget: View {
                                     let roomModel = try await homeViewModel.joinRoom(roomID: roomID)
                                     joinedRoom(roomModel)
                                     
-                                    withAnimation (.spring(duration: 1)){
+                                    withAnimation (.spring()){
                                         offset = 1000
                                         
                                         isOpen = false

@@ -129,14 +129,7 @@ class AuthenticationManager : ObservableObject {
     }
     
     func pfpUploaded(userID: String) async -> Bool {
-//       do {
-//           let options = StorageListRequest.Options(path: "pfp-media/\(userID).png", pageSize: 1)
-//           let listResult = try await Amplify.Storage.list(options: options)
-//           return listResult.items.count > 0
-//       } catch {
-//           print(error.localizedDescription)
-//           return false
-//       }
+ 
         
         return true
    }

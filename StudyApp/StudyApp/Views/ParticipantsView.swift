@@ -10,7 +10,7 @@ import SwiftUI
 struct ParticipantsView: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
-    @ObservedObject var participantsViewModel: ParticipantsViewModel
+    @ObservedObject var participantRoomManager: ParticipantRoomManager
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
@@ -25,7 +25,7 @@ struct ParticipantsView: View {
         ZStack {
             VStack {
                 HStack {
-                    Text(participantsViewModel.roomModel.roomName.isEmpty ? "Room Name" : participantsViewModel.roomModel.roomName)
+                    Text(participantRoomManager.roomModel.roomName.isEmpty ? "Room Name" : participantRoomManager.roomModel.roomName)
                         .foregroundColor(.white)
                         .bold()
                         .font(.title)
@@ -34,7 +34,7 @@ struct ParticipantsView: View {
                     
                     Button {
                         Task {
-                            await participantsViewModel.leaveRoom()
+                            await participantRoomManager.leaveRoom()
                         }
                         
                         dismiss()
@@ -50,7 +50,7 @@ struct ParticipantsView: View {
                 
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(participantsViewModel.roomModel.roomMembers, id: \.self) { member in
+                        ForEach(participantRoomManager.roomModel.roomMembers, id: \.self) { member in
                             HStack {
                                 Image("Man Smiling")
                                     .resizable()
@@ -88,7 +88,7 @@ struct ParticipantsView: View {
                                 
                             }
                             
-                            ForEach(participantsViewModel.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
+                            ForEach(participantRoomManager.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
                                 Divider()
                                 ScoreWidget(roomMember: member)
                             }
@@ -120,7 +120,7 @@ struct ParticipantsView: View {
 
                             }
                             
-                            if let roomID = participantsViewModel.roomModel.id {
+                            if let roomID = participantRoomManager.roomModel.id {
                                 ForEach(taskManager.tasks, id: \.id) { task in
                                     TaskView(roomID: roomID, task: task, taskManager: taskManager) { task in
                                         Task {
@@ -159,25 +159,25 @@ struct ParticipantsView: View {
                 .padding(.horizontal)
             }
             
-            if showTaskCreationSheet, let id = participantsViewModel.roomModel.id {
+            if showTaskCreationSheet, let id = participantRoomManager.roomModel.id {
                 TaskCreationView(taskManager: taskManager, isOpen: $showTaskCreationSheet, roomID: id)
                     .transition(.opacity)
             }
         }
         .sheet(isPresented: $showChatView, content: {
-            if let roomID = participantsViewModel.roomModel.id {
-                ChatView(messageManager: messageManager, roomID: roomID, roomBackground: participantsViewModel.roomModel.backgroundImage)
+            if let roomID = participantRoomManager.roomModel.id {
+                ChatView(messageManager: messageManager, roomID: roomID, roomBackground: participantRoomManager.roomModel.backgroundImage)
             }
         })
         .onAppear {
-            participantsViewModel.listenForRoomUpdates()
-            guard let roomID = participantsViewModel.roomModel.id else { return }
+            participantRoomManager.listenForRoomUpdates()
+            guard let roomID = participantRoomManager.roomModel.id else { return }
             
             messageManager.getMessage(roomID: roomID)
             taskManager.getTask(roomID: roomID)
         }
         .background(
-            Image("Jungle")
+            Image(participantRoomManager.roomModel.backgroundImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
@@ -187,5 +187,5 @@ struct ParticipantsView: View {
 }
 
 #Preview {
-    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantsViewModel: ParticipantsViewModel(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "Jungle")))
+    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantRoomManager: ParticipantRoomManager(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "JungleLake")))
 }

@@ -17,6 +17,64 @@ class HomeViewModel: ObservableObject {
         return userDisplay
     }
     
+    func roomExists(roomID: String) async -> Bool {
+        do {
+            let dbReference = Firestore.firestore()
+            
+            let snapshot = try await dbReference.collection("Rooms").document(roomID).getDocument()
+            guard let snapshotData = snapshot.data() else {
+                print("nil")
+                return false
+            }
+            
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    func createRoom() async throws -> RoomModel {
+        do {
+            guard let user = Auth.auth().currentUser, let userDisplayName = user.displayName else { throw AuthError.noUser }
+            let dbReference = Firestore.firestore()
+            
+            let roomID = generateRoomID()
+            
+            let roomMember: [String: Any] = [
+                    "userID": user.uid,
+                    "displayName": userDisplayName,
+                    "score": 0
+            ]
+            
+            try await dbReference.collection("Rooms").document(roomID).setData(
+                [
+                    "host" : user.uid,
+                    "roomMembers": [roomMember],
+                    "roomName": "Room Name",
+                    "backgroundImage": "JungleLake"
+                ]
+            )
+            
+            return RoomModel(id: roomID, host: user.uid, roomName: "Room Name", roomMembers: [RoomMember(userID: user.uid, displayName: userDisplayName, score: 0)], backgroundImage: "JungleLake")
+        }
+        catch {
+            throw AuthError.creationFailed
+        }
+    }
+    
+    func generateRoomID() -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyz"
+        var randomString = ""
+        
+        for number in 0..<6 {
+            let randomIndex = Int.random(in: 0..<26)
+            let randomCharIndex = letters.index(letters.startIndex, offsetBy: randomIndex)
+            randomString.append(letters[randomCharIndex])
+        }
+        
+        return randomString
+    }
+    
     func joinRoom(roomID: String) async throws -> RoomModel {
         do {
             guard let user = Auth.auth().currentUser, let displayName = user.displayName else {
@@ -38,22 +96,6 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func roomExists(roomID: String) async -> Bool {
-        do {
-            let dbReference = Firestore.firestore()
-            
-            let snapshot = try await dbReference.collection("Rooms").document(roomID).getDocument()
-            guard let snapshotData = snapshot.data() else {
-                print("nil")
-                return false
-            }
-            
-            return true
-        } catch {
-            return false
-        }
-    }
-    
     func addUserToRoom(roomModel: RoomModel) async {
         do {
             guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
@@ -68,53 +110,4 @@ class HomeViewModel: ObservableObject {
             print(error.localizedDescription)
         }
     }
-    
-    func createRoom() async throws -> (roomID: String, hostID: String, hostDisplayName: String) {
-        do {
-            guard let user = Auth.auth().currentUser, let userDisplayName = user.displayName else { throw AuthError.noUser }
-            let dbReference = Firestore.firestore()
-            
-            let roomID = generateRoomID()
-            
-            let roomMember: [String: Any] = [
-                    "userID": user.uid,
-                    "displayName": userDisplayName,
-                    "score": 0
-            ]
-            
-            try await dbReference.collection("Rooms").document(roomID).setData(
-                [
-                    "host" : user.uid,
-                    "roomMembers": [roomMember],
-                    "roomName": "Room Name",
-                    "backgroundImage": "Jungle"
-                ]
-            )
-            
-            return (roomID, user.uid, userDisplayName)
-        }
-        catch {
-            throw AuthError.creationFailed
-        }
-    }
-    
-    func generateRoomID() -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyz"
-        var randomString = ""
-        
-        for number in 0..<6 {
-            let randomIndex = Int.random(in: 0..<26)
-            let randomCharIndex = letters.index(letters.startIndex, offsetBy: randomIndex)
-            randomString.append(letters[randomCharIndex])
-        }
-        
-        return randomString
-    }
-}
-
-enum RoomEntryError: Error {
-    case dataRetrievalFailed
-}
-enum AuthError: Error {
-    case noUser, creationFailed
 }

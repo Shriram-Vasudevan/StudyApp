@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EnterRoomNameWidget: View {
-    @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
+    @ObservedObject var hostRoomManager: HostRoomManager
     @State var roomName: String = ""
     @Binding var isOpen: Bool
     
@@ -23,10 +23,10 @@ struct EnterRoomNameWidget: View {
             Color.black.opacity(0.5)
                 .onTapGesture {
                     Task {
-                        await hostsRoomViewModel.updateRoomName(roomName: roomName)
+                        await hostRoomManager.updateRoomName(roomName: roomName)
                     }
                     
-                    withAnimation (.spring(duration: 1)){
+                    withAnimation (.spring()){
                         offset = 1000
                         
                         isOpen = false
@@ -70,5 +70,5 @@ struct EnterRoomNameWidget: View {
 }
 
 #Preview {
-    EnterRoomNameWidget(hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "Jungle")), isOpen: .constant(true))
+    EnterRoomNameWidget(hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "JungleLake")), isOpen: .constant(true))
 }

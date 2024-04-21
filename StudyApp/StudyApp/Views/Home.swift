@@ -10,7 +10,8 @@ import SwiftUI
 struct Home: View {
     @StateObject var taskManager = TaskManager()
     @StateObject var messageManager = MessageManager()
-    @ObservedObject var homeViewModel = HomeViewModel()
+    @StateObject var homeViewModel = HomeViewModel()
+    @StateObject var hostRoomManager = HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [RoomMember(userID: "", displayName: "", score: 0)], backgroundImage: ""))
     var authenticationManager = AuthenticationManager()
     
     @Binding var pageType: PageType
@@ -20,7 +21,6 @@ struct Home: View {
     
     @State var roomID: String = ""
     
-    @State var roomInformation: (String, String, String) = ("", "", "")
     @State var roomModel: RoomModel?
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
@@ -115,8 +115,9 @@ struct Home: View {
                     Button {
                         Task {
                             do {
-                                let roomInformation = try await homeViewModel.createRoom()
-                                self.roomInformation = roomInformation
+                                let roomModel = try await homeViewModel.createRoom()
+                                self.roomModel = roomModel
+                                hostRoomManager.roomModel = roomModel
                                 
                                 navigateToHostRoom = true
                             } catch {
@@ -140,11 +141,13 @@ struct Home: View {
             }
             .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
                 if let roomModel = self.roomModel {
-                    ParticipantsView(taskManager: TaskManager(), messageManager: messageManager, participantsViewModel: ParticipantsViewModel(roomModel: roomModel))
+                    ParticipantsView(taskManager: TaskManager(), messageManager: messageManager, participantRoomManager: ParticipantRoomManager(roomModel: roomModel))
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
-                HostsRoom(taskManager: taskManager, messageManager: messageManager, hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: roomInformation.0, host: roomInformation.1, roomName: "Room Name", roomMembers: [RoomMember(userID: roomInformation.1, displayName: roomInformation.2, score: 0)], backgroundImage: "Jungle")))
+                if let roomModel = self.roomModel {
+                    HostsRoom(taskManager: taskManager, messageManager: messageManager, hostRoomManager: hostRoomManager)
+                }
             })
             .background(
                 .white

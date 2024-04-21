@@ -78,5 +78,5 @@ struct ChatView: View {
 }
 
 #Preview {
-    ChatView(messageManager: MessageManager(), roomID: "", roomBackground: "Jungle")
+    ChatView(messageManager: MessageManager(), roomID: "", roomBackground: "JungleLake")
 }

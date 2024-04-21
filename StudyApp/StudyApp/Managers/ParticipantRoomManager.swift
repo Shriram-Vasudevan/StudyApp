@@ -1,8 +1,8 @@
 //
-//  HostsRoomViewModel.swift
+//  ParticipantRoomManager.swift
 //  StudyApp
 //
-//  Created by Shriram Vasudevan on 4/7/24.
+//  Created by Shriram Vasudevan on 4/21/24.
 //
 
 import Foundation
@@ -11,9 +11,8 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 
-class HostsRoomViewModel: ObservableObject {
+class ParticipantRoomManager: ObservableObject {
     @Published var roomModel: RoomModel
-    
     let db = Firestore.firestore()
     let storage = Storage.storage()
     
@@ -21,24 +20,13 @@ class HostsRoomViewModel: ObservableObject {
         self.roomModel = roomModel
     }
     
-    func closeRoom() {
-        guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
-        
-        db.collection("Rooms").document(roomID).delete()
-    }
-    
-    func updateRoomName(roomName: String) async {
+    func leaveRoom() async {
         do {
-            DispatchQueue.main.async {
-                self.roomModel.roomName = roomName
-            }
+            guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
             
-            guard let roomID = roomModel.id else { return }
-            let dbRef = Firestore.firestore()
-            
-            try await dbRef.collection("Rooms").document(roomID).updateData(
+            try await db.collection("Rooms").document(roomID).updateData(
                 [
-                    "roomName" : roomName
+                    "roomMembers" : FieldValue.arrayRemove(["\(user.uid)-\(userDisplayName)"])
                 ]
             )
         } catch {
@@ -67,14 +55,10 @@ class HostsRoomViewModel: ObservableObject {
                         self.roomModel = updatedRoomModel
                         print(self.roomModel)
                     }
-                    
-//                    print("worked")
-//                    print(self.roomModel.roomMembers)
                 } catch {
                     print(error.localizedDescription)
                     return
                 }
           }
     }
-    
 }

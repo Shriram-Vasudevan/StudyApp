@@ -52,7 +52,7 @@ struct TaskCreationView: View {
                 Button(action: {
                     taskManager.createTask(task: task, roomID: roomID)
 
-                    withAnimation (.spring(duration: 1)){
+                    withAnimation (.spring()){
                         offset = 1000
                         isOpen = false
                     }

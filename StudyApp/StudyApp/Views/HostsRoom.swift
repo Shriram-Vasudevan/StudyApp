@@ -10,7 +10,7 @@ import SwiftUI
 struct HostsRoom: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
-    @ObservedObject var hostsRoomViewModel: HostsRoomViewModel
+    @ObservedObject var hostRoomManager: HostRoomManager
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
@@ -21,6 +21,8 @@ struct HostsRoom: View {
     @State var showTaskCreationSheet: Bool = false
     @State var task: String = ""
     
+    @State var showChangeBackgroundWidget: Bool = false
+    
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -29,7 +31,7 @@ struct HostsRoom: View {
                 HStack {
                     VStack (alignment: .leading) {
                         HStack {
-                            Text(hostsRoomViewModel.roomModel.roomName.isEmpty ? "Room Name" : hostsRoomViewModel.roomModel.roomName)
+                            Text(hostRoomManager.roomModel.roomName.isEmpty ? "Room Name" : hostRoomManager.roomModel.roomName)
                                 .foregroundColor(.white)
                                 .bold()
                                 .font(.title)
@@ -42,7 +44,7 @@ struct HostsRoom: View {
                             
                         }
                         
-                        if let id = hostsRoomViewModel.roomModel.id {
+                        if let id = hostRoomManager.roomModel.id {
                             Text(id.isEmpty ? "Error Loading ID" : id)
                                 .font(.headline)
                                 .bold()
@@ -53,7 +55,7 @@ struct HostsRoom: View {
                     Spacer()
                     
                     Button {
-                        hostsRoomViewModel.closeRoom()
+                        hostRoomManager.closeRoom()
                         
                         dismiss()
                     } label: {
@@ -71,7 +73,7 @@ struct HostsRoom: View {
                 
                 ScrollView(.horizontal) {
                     HStack {
-                        ForEach(hostsRoomViewModel.roomModel.roomMembers, id: \.self) { member in
+                        ForEach(hostRoomManager.roomModel.roomMembers, id: \.self) { member in
                             HStack {
                                 Image("Man Smiling")
                                     .resizable()
@@ -109,7 +111,7 @@ struct HostsRoom: View {
                                 
                             }
                             
-                            ForEach(hostsRoomViewModel.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
+                            ForEach(hostRoomManager.roomModel.roomMembers.sorted(by: { $0.score > $1.score}), id: \.userID) { member in
                                 Divider()
                                 ScoreWidget(roomMember: member)
                             }
@@ -140,7 +142,7 @@ struct HostsRoom: View {
                                 }
                             }
                             
-                            if let roomID = hostsRoomViewModel.roomModel.id {
+                            if let roomID = hostRoomManager.roomModel.id {
                                 ForEach(taskManager.tasks, id: \.id) { task in
                                     Divider()
                                     TaskView(roomID: roomID,task: task, taskManager: taskManager) { task in
@@ -163,16 +165,21 @@ struct HostsRoom: View {
                 Spacer()
                 
                 HStack {
-                    Image("Jungle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 50, height: 50)
-                        .clipped()
-                        .cornerRadius(10)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.white, lineWidth: 2)
-                        }
+                    Button {
+                        showChangeBackgroundWidget = true
+                    } label: {
+                        Image(hostRoomManager.roomModel.backgroundImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .clipped()
+                            .cornerRadius(10)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.white, lineWidth: 2)
+                            }
+                    }
+
                     
                     Spacer()
                     
@@ -195,31 +202,35 @@ struct HostsRoom: View {
             }
             
             if showEnterRoomNameWidget {
-                EnterRoomNameWidget(hostsRoomViewModel: hostsRoomViewModel, isOpen: $showEnterRoomNameWidget)
+                EnterRoomNameWidget(hostRoomManager: hostRoomManager, isOpen: $showEnterRoomNameWidget)
                     .transition(.opacity)
             }
             
-            if showTaskCreationSheet, let id = hostsRoomViewModel.roomModel.id {
+            if showTaskCreationSheet, let id = hostRoomManager.roomModel.id {
                 TaskCreationView(taskManager: taskManager, isOpen: $showTaskCreationSheet, roomID: id)
                     .transition(.opacity)
             }
+            
+            if showChangeBackgroundWidget {
+                PickBackgroundView(hostRoomManager: hostRoomManager, isOpen: $showChangeBackgroundWidget)
+            }
         }
         .sheet(isPresented: $showChatView, content: {
-            if let roomID = hostsRoomViewModel.roomModel.id {
-                ChatView(messageManager: messageManager, roomID: roomID, roomBackground: hostsRoomViewModel.roomModel.backgroundImage)
+            if let roomID = hostRoomManager.roomModel.id {
+                ChatView(messageManager: messageManager, roomID: roomID, roomBackground: hostRoomManager.roomModel.backgroundImage)
             }
         })
         .onAppear {
             showEnterRoomNameWidget = true
-            hostsRoomViewModel.listenForRoomUpdates()
+            hostRoomManager.listenForRoomUpdates()
             
-            guard let roomID = hostsRoomViewModel.roomModel.id else { return }
+            guard let roomID = hostRoomManager.roomModel.id else { return }
             
             messageManager.getMessage(roomID: roomID)
             taskManager.getTask(roomID: roomID)
         }
         .background(
-            Image("Jungle")
+            Image(hostRoomManager.roomModel.backgroundImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
@@ -229,5 +240,5 @@ struct HostsRoom: View {
 }
 
 #Preview {
-    HostsRoom(taskManager: TaskManager(), messageManager: MessageManager(), hostsRoomViewModel: HostsRoomViewModel(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "Jungle")))
+    HostsRoom(taskManager: TaskManager(), messageManager: MessageManager(), hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "test", host: "rffw8efy948yr9r8", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "JungleLake")))
 }
