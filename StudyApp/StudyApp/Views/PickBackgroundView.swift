@@ -14,7 +14,9 @@ struct PickBackgroundView: View {
     @Binding var isOpen: Bool
     
     let columns: [GridItem] = [GridItem(.fixed(70)), GridItem(.fixed(70)), GridItem(.fixed(70))]
-    let images: [String] = ["JungleLake", "LakeMountainMarsh", "Mountains", "JungleBridge"]
+    let images: [String] = ["JungleLake", "LakeMountainMarsh", "Mountains", "JungleBridge", "Cliff", "Waterfall"]
+    
+    let songs: [String] = ["CruisinAlong", "TropicalKeys", "ReachingOut"]
     
     var body: some View {
         
@@ -81,5 +83,5 @@ struct backgroundImageWidget: View {
 }
 
 #Preview {
-    PickBackgroundView(hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "JungleLake")), isOpen: .constant(true))
+    PickBackgroundView(hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "JungleLake", music: "")), isOpen: .constant(true))
 }

@@ -10,12 +10,14 @@ import SwiftUI
 struct ChatView: View {
     @ObservedObject var messageManager: MessageManager
     @State private var message: String = ""
+    @FocusState private var chatFieldIsFocused: Bool
     
     var roomID: String
     var roomBackground: String
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
+    
     
     var body: some View {
         ZStack {
@@ -54,6 +56,7 @@ struct ChatView: View {
                         )
                         .overlay(
                             Button(action: {
+                                chatFieldIsFocused = false
                                 messageManager.sendMessage(message: message, roomID: roomID)
                                 message = ""
                             }, label: {
@@ -64,6 +67,7 @@ struct ChatView: View {
                             }),
                             alignment: .trailing
                         )
+                        .focused($chatFieldIsFocused)
                 }
                 .padding([.leading, .trailing, .bottom], 12)
             }

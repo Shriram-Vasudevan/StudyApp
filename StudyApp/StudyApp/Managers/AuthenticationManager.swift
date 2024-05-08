@@ -11,16 +11,29 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
+import SwiftUI
 
 class AuthenticationManager : ObservableObject {
-    
     func isUserSignedIn() -> Bool {
-        guard let currentUser = Auth.auth().currentUser else { return false }
-        
-        print("user exists: \(currentUser.uid)")
-        
-        return true
+        guard let currentUser = Auth.auth().currentUser else {
+            return false
+        }
+
+        do {
+            let _ = currentUser.getIDTokenForcingRefresh(true)
+            print("ID Token is valid. User exists: \(currentUser.uid)")
+            return true
+        } catch {
+            print("Error fetching ID token: \(error)")
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("Error signing out: \(error)")
+            }
+            return false
+        }
     }
+
     func signInAnonymously(completionHandler: @escaping () -> Void) {
         Auth.auth().signInAnonymously { (authResult, error) in
             guard let user = authResult?.user else {
@@ -93,13 +106,16 @@ class AuthenticationManager : ObservableObject {
         let storageRef = storage.reference()
     
         if await pfpUploaded(userID: userID) {
+            print("uploaded")
             return
         }
         else {
             guard let directoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             let pfpUrl = directoryUrl.appendingPathComponent("pfp-\(userID).png", isDirectory: false)
             if FileManager.default.fileExists(atPath: pfpUrl.path) {
-                guard let pfpData = FileManager.default.contents(atPath: pfpUrl.path) else { return
+                guard let pfpData = FileManager.default.contents(atPath: pfpUrl.path) else { 
+                    print("data exists")
+                    return
                 }
                 
                 let storageRefChild = storageRef.child("ProfilePictures/\(userID).jpg")
@@ -111,17 +127,21 @@ class AuthenticationManager : ObservableObject {
                     let size = metadata.size
                     
                     storageRef.downloadURL { (url, error) in
-                        
+                        print(error)
                         guard let downloadURL = url else {
+                            print("url did not work")
                             return
                         }
                         
                         let imageURL = downloadURL.absoluteString
+                        
+                        print(imageURL)
                     }
                 }
                 
             }
             else {
+                print("no file")
                 return
             }
         }
@@ -129,9 +149,15 @@ class AuthenticationManager : ObservableObject {
     }
     
     func pfpUploaded(userID: String) async -> Bool {
- 
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
         
-        return true
+        do {
+            let pfp = try await storageRef.child("ProfilePictures/\(userID).jpg").data(maxSize: 4096 * 4096)
+            return true
+        } catch {
+            return false
+        }
    }
     
     func saveProfilePictureLocally(pfpData: Data, userID: String) {
@@ -143,7 +169,7 @@ class AuthenticationManager : ObservableObject {
             do {
                 try pfpData.write(to: pfpURL)
             } catch {
-                print(error.localizedDescription)
+                print("local pfp error: " + error.localizedDescription)
             }
         }
     }

@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct Home: View {
+    @StateObject var aiChatManager = AIManager()
     @StateObject var taskManager = TaskManager()
     @StateObject var messageManager = MessageManager()
     @StateObject var homeViewModel = HomeViewModel()
-    @StateObject var hostRoomManager = HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [RoomMember(userID: "", displayName: "", score: 0)], backgroundImage: ""))
+    @StateObject var hostRoomManager = HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [RoomMember(userID: "", displayName: "", score: 0)], backgroundImage: "", music: ""))
     var authenticationManager = AuthenticationManager()
     
     @Binding var pageType: PageType
@@ -32,7 +34,7 @@ struct Home: View {
             ZStack {
                 VStack (spacing: 0) {
                     HStack {
-                        Text("Hello \(homeViewModel.getDisplayName())")
+                        Text("Hello John Doe 2")
                             .foregroundColor(.black)
                             .font(.custom("EtruscoNowCondensed Bold", size: 40))
                             .bold()
@@ -101,14 +103,6 @@ struct Home: View {
                     }
                 }
                 
-                if showEnterRoomIDView {
-                    EnterRoomIDWidget(homeViewModel: homeViewModel, isOpen: $showEnterRoomIDView) { roomModel in
-                        self.roomModel = roomModel
-                        navigateToParticipantRoom = true
-                    }
-                    .transition(.opacity)
-                }
-                
                 VStack {
                     Spacer()
                     
@@ -138,20 +132,40 @@ struct Home: View {
                     }
                 }
                 
+                if showEnterRoomIDView {
+                    EnterRoomIDWidget(homeViewModel: homeViewModel, isOpen: $showEnterRoomIDView) { roomModel in
+                        self.roomModel = roomModel
+                        navigateToParticipantRoom = true
+                    }
+                    .transition(.opacity)
+                }
+                
+                
             }
             .navigationDestination(isPresented: $navigateToParticipantRoom, destination: {
                 if let roomModel = self.roomModel {
-                    ParticipantsView(taskManager: TaskManager(), messageManager: messageManager, participantRoomManager: ParticipantRoomManager(roomModel: roomModel))
+                    ParticipantsView(taskManager: TaskManager(), messageManager: messageManager, participantRoomManager: ParticipantRoomManager(roomModel: roomModel), AIManager: aiChatManager)
                 }
             })
             .navigationDestination(isPresented: $navigateToHostRoom, destination: {
                 if let roomModel = self.roomModel {
-                    HostsRoom(taskManager: taskManager, messageManager: messageManager, hostRoomManager: hostRoomManager)
+                    HostsRoom(taskManager: taskManager, messageManager: messageManager, hostRoomManager: hostRoomManager, AIManager: aiChatManager)
                 }
             })
             .background(
                 .white
             )
+            .onAppear {
+//                Task {
+//                    if let userID = Auth.auth().currentUser?.uid {
+//                        await authenticationManager.uploadProfilePicture(userID: userID)
+//                    }
+//                }
+//                authenticationManager.signOut(completionHandler: {
+//                    print("signed out")
+//                    
+//                })
+            }
         }
     }
 }

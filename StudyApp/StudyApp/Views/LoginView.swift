@@ -144,11 +144,6 @@ struct LoginView: View {
         
         if (!emailError && !passwordError) {
             authenticationManager.signIn(email: email, password: password, completionHandler: {
-                Task {
-                    if let userID = Auth.auth().currentUser?.uid {
-                        await authenticationManager.uploadProfilePicture(userID: userID)
-                    }
-                }
                 pageType = .main
             })
         }

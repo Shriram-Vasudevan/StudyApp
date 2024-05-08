@@ -19,12 +19,15 @@ struct TaskCreationView: View {
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
     
+    @FocusState private var nameIsFocused: Bool
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.5)
                 .onTapGesture {
                     print("tapped outside")
                     withAnimation (.spring(duration: 1)){
+                        nameIsFocused = false
                         offset = 1000
                         isOpen = false
                     }
@@ -48,11 +51,13 @@ struct TaskCreationView: View {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(customGrey)
                     )
+                    .focused($nameIsFocused)
                 
                 Button(action: {
                     taskManager.createTask(task: task, roomID: roomID)
 
                     withAnimation (.spring()){
+                        nameIsFocused = false
                         offset = 1000
                         isOpen = false
                     }

@@ -11,6 +11,7 @@ struct ParticipantsView: View {
     @ObservedObject var taskManager: TaskManager
     @ObservedObject var messageManager: MessageManager
     @ObservedObject var participantRoomManager: ParticipantRoomManager
+    @ObservedObject var AIManager: AIManager
     
     let customGrey: Color = Color(red: 248/255.0, green: 252/255.0, blue: 252/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
@@ -19,11 +20,13 @@ struct ParticipantsView: View {
     
     @State var showTaskCreationSheet: Bool = false
     
+    @State var showAIAssistantSheet: Bool = false
+    
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack (spacing: 0) {
                 HStack {
                     Text(participantRoomManager.roomModel.roomName.isEmpty ? "Room Name" : participantRoomManager.roomModel.roomName)
                         .foregroundColor(.white)
@@ -52,7 +55,7 @@ struct ParticipantsView: View {
                     HStack {
                         ForEach(participantRoomManager.roomModel.roomMembers, id: \.self) { member in
                             HStack {
-                                Image("Man Smiling")
+                                Image("Kevin")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 30, height: 30)
@@ -73,7 +76,7 @@ struct ParticipantsView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
+                .padding()
                 
                 ScrollView(.vertical) {
                     VStack (spacing: 0) {
@@ -98,7 +101,8 @@ struct ParticipantsView: View {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(.white)
                         )
-                        .padding()
+                        .padding(.horizontal)
+                        .padding(.top)
                         
                         VStack (spacing: 0) {
                             HStack {
@@ -135,7 +139,66 @@ struct ParticipantsView: View {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(.white)
                         )
-                        .padding()
+                        .padding(.horizontal)
+                        .padding(.top)
+                        
+                        Button {
+                            showAIAssistantSheet = true
+                        } label: {
+                            VStack (spacing: 0) {
+                                HStack {
+                                    Image("Kevin")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 150)
+                                    
+                                    Spacer()
+                                    
+                                    Text("Need Some Help?")
+                                        .multilineTextAlignment(.center)
+                                        .font(.title)
+                                        .bold()
+                                }
+    //                            .padding(.horizontal)
+                            }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.white)
+                            )
+                            .padding(.horizontal)
+                            .padding(.top)
+                        }
+                        
+                        Button {
+                            if participantRoomManager.musicOn {
+                                participantRoomManager.pauseMusic()
+                            } else {
+                                participantRoomManager.changeMusic()
+                            }
+                        } label: {
+                            HStack {
+                                Text(participantRoomManager.roomModel.music)
+                                    .font(.custom("EtruscoNowCondensed Bold", size: 35))
+                                    .bold()
+                                
+                                Spacer()
+                                
+                                Circle()
+                                    .fill(.green)
+                                    .frame(width: 40, height: 40)
+                                    .overlay {
+                                        Image(systemName: participantRoomManager.musicOn ? "play.fill" : "pause.fill")
+                                            .foregroundColor(.black)
+                                    }
+                            }
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.white)
+                            )
+                            .padding()
+                        }
                     }
                 }
                 
@@ -164,6 +227,9 @@ struct ParticipantsView: View {
                     .transition(.opacity)
             }
         }
+        .sheet(isPresented: $showAIAssistantSheet, content: {
+            AIChatView(AIManager: AIManager)
+        })
         .sheet(isPresented: $showChatView, content: {
             if let roomID = participantRoomManager.roomModel.id {
                 ChatView(messageManager: messageManager, roomID: roomID, roomBackground: participantRoomManager.roomModel.backgroundImage)
@@ -187,5 +253,5 @@ struct ParticipantsView: View {
 }
 
 #Preview {
-    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantRoomManager: ParticipantRoomManager(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "JungleLake")))
+    ParticipantsView(taskManager: TaskManager(), messageManager: MessageManager(), participantRoomManager: ParticipantRoomManager(roomModel: RoomModel(id: "test", host: "fewfwdfrwe", roomName: "Shriram's Room", roomMembers: [], backgroundImage: "JungleLake", music: "")), AIManager: AIManager())
 }

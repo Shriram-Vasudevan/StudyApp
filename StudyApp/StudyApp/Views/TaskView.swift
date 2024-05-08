@@ -26,7 +26,9 @@ struct TaskView: View {
                 Spacer()
                 
                 Button {
-                    taskManager.deleteTask(taskID: task.id, roomID: roomID)
+                    withAnimation {
+                        taskManager.deleteTask(taskID: task.id, roomID: roomID)
+                    }
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(.red)

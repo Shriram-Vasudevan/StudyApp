@@ -17,6 +17,7 @@ struct EnterRoomNameWidget: View {
     let customGrey: Color = Color(red: 230/255.0, green: 230/255.0, blue: 230/255.0)
     let customBlue = Color(red: 32/255.0, green: 116/255.0, blue: 252/255.0)
     
+    @FocusState private var nameIsFocused: Bool
     
     var body: some View {
         ZStack {
@@ -27,8 +28,8 @@ struct EnterRoomNameWidget: View {
                     }
                     
                     withAnimation (.spring()){
+                        nameIsFocused = false
                         offset = 1000
-                        
                         isOpen = false
                     }
                 }
@@ -51,6 +52,7 @@ struct EnterRoomNameWidget: View {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(customGrey.opacity(0.7))
                     )
+                    .focused($nameIsFocused)
             }
             .padding()
             .background(
@@ -70,5 +72,5 @@ struct EnterRoomNameWidget: View {
 }
 
 #Preview {
-    EnterRoomNameWidget(hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "JungleLake")), isOpen: .constant(true))
+    EnterRoomNameWidget(hostRoomManager: HostRoomManager(roomModel: RoomModel(id: "", host: "", roomName: "", roomMembers: [], backgroundImage: "JungleLake", music: "")), isOpen: .constant(true))
 }

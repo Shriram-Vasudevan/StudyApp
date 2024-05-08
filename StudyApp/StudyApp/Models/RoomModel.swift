@@ -14,6 +14,7 @@ struct RoomModel: Identifiable, Codable {
     var roomName: String
     var roomMembers: [RoomMember]
     var backgroundImage: String
+    var music: String
 //    var timer: Double?
 
     

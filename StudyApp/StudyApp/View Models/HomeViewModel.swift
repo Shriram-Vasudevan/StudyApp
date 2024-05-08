@@ -51,11 +51,12 @@ class HomeViewModel: ObservableObject {
                     "host" : user.uid,
                     "roomMembers": [roomMember],
                     "roomName": "Room Name",
-                    "backgroundImage": "JungleLake"
+                    "backgroundImage": "JungleLake",
+                    "music": "TropicalKeys"
                 ]
             )
             
-            return RoomModel(id: roomID, host: user.uid, roomName: "Room Name", roomMembers: [RoomMember(userID: user.uid, displayName: userDisplayName, score: 0)], backgroundImage: "JungleLake")
+            return RoomModel(id: roomID, host: user.uid, roomName: "Room Name", roomMembers: [RoomMember(userID: user.uid, displayName: userDisplayName, score: 0)], backgroundImage: "JungleLake", music: "TropicalKeys")
         }
         catch {
             throw AuthError.creationFailed
@@ -101,9 +102,15 @@ class HomeViewModel: ObservableObject {
             guard let user = Auth.auth().currentUser, let roomID = roomModel.id, let userDisplayName = user.displayName else { return }
             let dbRef = Firestore.firestore()
             
+            let roomMember: [String: Any] = [
+                    "userID": user.uid,
+                    "displayName": userDisplayName,
+                    "score": 0
+            ]
+            
             try await dbRef.collection("Rooms").document(roomID).updateData(
                 [
-                    "roomMembers" : FieldValue.arrayUnion([RoomMember(userID: user.uid, displayName: userDisplayName, score: 0)])
+                    "roomMembers" : FieldValue.arrayUnion([roomMember])
                 ]
             )
         } catch {

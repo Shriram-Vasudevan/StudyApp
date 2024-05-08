@@ -80,6 +80,13 @@
 		99FC24912BD566AB00F9CE4E /* PickBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24902BD566AA00F9CE4E /* PickBackgroundView.swift */; };
 		99FC24932BD59F5700F9CE4E /* HostRoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24922BD59F5700F9CE4E /* HostRoomManager.swift */; };
 		99FC24952BD59F6800F9CE4E /* ParticipantRoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24942BD59F6800F9CE4E /* ParticipantRoomManager.swift */; };
+		99FC249A2BD8A07A00F9CE4E /* ReachingOut.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 99FC24972BD8A07900F9CE4E /* ReachingOut.mp3 */; };
+		99FC249B2BD8A07A00F9CE4E /* CruisinAlong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 99FC24982BD8A07A00F9CE4E /* CruisinAlong.mp3 */; };
+		99FC249C2BD8A07A00F9CE4E /* TropicalKeys.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 99FC24992BD8A07A00F9CE4E /* TropicalKeys.mp3 */; };
+		99FC249E2BD8A08E00F9CE4E /* PickMusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC249D2BD8A08E00F9CE4E /* PickMusicView.swift */; };
+		99FC24A22BDB36F500F9CE4E /* AIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24A12BDB36F500F9CE4E /* AIManager.swift */; };
+		99FC24A42BDB38B800F9CE4E /* AIChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24A32BDB38B800F9CE4E /* AIChatView.swift */; };
+		99FC24A62BDB40E000F9CE4E /* GPTResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC24A52BDB40E000F9CE4E /* GPTResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +135,13 @@
 		99FC24902BD566AA00F9CE4E /* PickBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickBackgroundView.swift; sourceTree = "<group>"; };
 		99FC24922BD59F5700F9CE4E /* HostRoomManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostRoomManager.swift; sourceTree = "<group>"; };
 		99FC24942BD59F6800F9CE4E /* ParticipantRoomManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantRoomManager.swift; sourceTree = "<group>"; };
+		99FC24972BD8A07900F9CE4E /* ReachingOut.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ReachingOut.mp3; sourceTree = "<group>"; };
+		99FC24982BD8A07A00F9CE4E /* CruisinAlong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = CruisinAlong.mp3; sourceTree = "<group>"; };
+		99FC24992BD8A07A00F9CE4E /* TropicalKeys.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = TropicalKeys.mp3; sourceTree = "<group>"; };
+		99FC249D2BD8A08E00F9CE4E /* PickMusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickMusicView.swift; sourceTree = "<group>"; };
+		99FC24A12BDB36F500F9CE4E /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
+		99FC24A32BDB38B800F9CE4E /* AIChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIChatView.swift; sourceTree = "<group>"; };
+		99FC24A52BDB40E000F9CE4E /* GPTResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +204,7 @@
 		99FC23C12BC1FAB400F9CE4E /* StudyApp */ = {
 			isa = PBXGroup;
 			children = (
+				99FC24962BD89EB400F9CE4E /* Music */,
 				99FC248B2BD081F200F9CE4E /* Extensions */,
 				99FC24422BC314C700F9CE4E /* Info.plist */,
 				99FC23D72BC24A1800F9CE4E /* GoogleService-Info.plist */,
@@ -232,6 +247,8 @@
 				99FC24652BC8758600F9CE4E /* TaskCreationView.swift */,
 				99FC24692BCC54A600F9CE4E /* ScoreWidget.swift */,
 				99FC24902BD566AA00F9CE4E /* PickBackgroundView.swift */,
+				99FC249D2BD8A08E00F9CE4E /* PickMusicView.swift */,
+				99FC24A32BDB38B800F9CE4E /* AIChatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -243,6 +260,7 @@
 				99FC24552BC6053500F9CE4E /* PageType.swift */,
 				99FC24592BC60C8700F9CE4E /* Message.swift */,
 				99FC24612BC8542B00F9CE4E /* TaskModel.swift */,
+				99FC24A52BDB40E000F9CE4E /* GPTResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -264,6 +282,7 @@
 				99FC24672BC875CA00F9CE4E /* TaskManager.swift */,
 				99FC24922BD59F5700F9CE4E /* HostRoomManager.swift */,
 				99FC24942BD59F6800F9CE4E /* ParticipantRoomManager.swift */,
+				99FC24A12BDB36F500F9CE4E /* AIManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -292,6 +311,16 @@
 				99FC248C2BD0820300F9CE4E /* RoomModelArrayExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		99FC24962BD89EB400F9CE4E /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				99FC24982BD8A07A00F9CE4E /* CruisinAlong.mp3 */,
+				99FC24972BD8A07900F9CE4E /* ReachingOut.mp3 */,
+				99FC24992BD8A07A00F9CE4E /* TropicalKeys.mp3 */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,10 +423,13 @@
 				99FC23CA2BC1FAB500F9CE4E /* Preview Assets.xcassets in Resources */,
 				99FC24412BC314B700F9CE4E /* EtruscoNow Medium.ttf in Resources */,
 				99FC243B2BC314B700F9CE4E /* times new roman bold italic.ttf in Resources */,
+				99FC249C2BD8A07A00F9CE4E /* TropicalKeys.mp3 in Resources */,
 				99FC24392BC314B700F9CE4E /* Sailec Light.ttf in Resources */,
 				99FC243F2BC314B700F9CE4E /* Sailec Medium.ttf in Resources */,
 				99FC243A2BC314B700F9CE4E /* Sailec Bold.ttf in Resources */,
+				99FC249A2BD8A07A00F9CE4E /* ReachingOut.mp3 in Resources */,
 				99FC24402BC314B700F9CE4E /* EtruscoNowCondensed Bold.ttf in Resources */,
+				99FC249B2BD8A07A00F9CE4E /* CruisinAlong.mp3 in Resources */,
 				99FC23C72BC1FAB500F9CE4E /* Assets.xcassets in Resources */,
 				99FC243E2BC314B700F9CE4E /* times new roman italic.ttf in Resources */,
 				99FC23D82BC24A1800F9CE4E /* GoogleService-Info.plist in Resources */,
@@ -414,6 +446,7 @@
 				99FC244C2BC3601100F9CE4E /* ParticipantsView.swift in Sources */,
 				99FC24622BC8542B00F9CE4E /* TaskModel.swift in Sources */,
 				99FC24212BC30C6700F9CE4E /* HostsRoom.swift in Sources */,
+				99FC249E2BD8A08E00F9CE4E /* PickMusicView.swift in Sources */,
 				99FC24542BC6051800F9CE4E /* PagesHolderView.swift in Sources */,
 				99FC24932BD59F5700F9CE4E /* HostRoomManager.swift in Sources */,
 				99FC242B2BC313BD00F9CE4E /* RegisterView.swift in Sources */,
@@ -421,10 +454,12 @@
 				99FC248D2BD0820300F9CE4E /* RoomModelArrayExtension.swift in Sources */,
 				99FC24912BD566AB00F9CE4E /* PickBackgroundView.swift in Sources */,
 				99FC24502BC3631600F9CE4E /* EnterRoomIDWidget.swift in Sources */,
+				99FC24A22BDB36F500F9CE4E /* AIManager.swift in Sources */,
 				99FC24582BC60C6B00F9CE4E /* MessageManager.swift in Sources */,
 				99FC24232BC3127100F9CE4E /* LoginView.swift in Sources */,
 				99FC23C52BC1FAB400F9CE4E /* ContentView.swift in Sources */,
 				99FC24952BD59F6800F9CE4E /* ParticipantRoomManager.swift in Sources */,
+				99FC24A42BDB38B800F9CE4E /* AIChatView.swift in Sources */,
 				99FC24292BC3139000F9CE4E /* KeyboardResponder.swift in Sources */,
 				99FC24442BC31CEB00F9CE4E /* RoomModel.swift in Sources */,
 				99FC24272BC312FD00F9CE4E /* AuthenticationManager.swift in Sources */,
@@ -434,6 +469,7 @@
 				99FC245C2BC6108A00F9CE4E /* ChatBubble.swift in Sources */,
 				99FC23D62BC20A0300F9CE4E /* Home.swift in Sources */,
 				99FC24462BC326C000F9CE4E /* EnterRoomNameWidget.swift in Sources */,
+				99FC24A62BDB40E000F9CE4E /* GPTResponse.swift in Sources */,
 				99FC24562BC6053500F9CE4E /* PageType.swift in Sources */,
 				99FC246A2BCC54A600F9CE4E /* ScoreWidget.swift in Sources */,
 				99FC23C32BC1FAB400F9CE4E /* StudyAppApp.swift in Sources */,

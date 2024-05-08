@@ -37,7 +37,7 @@ struct EnterRoomIDWidget: View {
             
             VStack {
                 HStack {
-                    Text("Create a Room Code")
+                    Text("Enter a Room Code")
                         .font(.headline)
                         .foregroundColor(.black)
                     
@@ -78,7 +78,7 @@ struct EnterRoomIDWidget: View {
                         }
                     }
                 } label: {
-                    Text("Enter")
+                    Text("Join")
                         .foregroundColor(.white)
                         .font(.headline)
                         .bold()
